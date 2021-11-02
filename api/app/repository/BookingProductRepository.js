@@ -1,5 +1,5 @@
-import { Repository } from './repository';
-import Sequelize from 'sequelize';
+import { Repository } from "./repository";
+import Sequelize from "sequelize";
 
 class BookingProductRepository extends Repository {
   constructor(bookingProducts) {
@@ -31,7 +31,7 @@ class BookingProductRepository extends Repository {
 
   async getOrderedProductsByOrderId(orderId, items) {
     try {
-      const include = [{ model: items, as: 'Product_Booking_Key' }];
+      const include = [{ model: items, as: "Product_Booking_Key" }];
 
       return await this.findAllRecords(
         {
@@ -69,14 +69,14 @@ class BookingProductRepository extends Repository {
           ]
         },
         [
-          'product_id',
+          "product_id",
           [
-            Sequelize.fn('SUM', Sequelize.col('order_quantity')),
-            'order_quantity'
+            Sequelize.fn("SUM", Sequelize.col("order_quantity")),
+            "order_quantity"
           ]
         ],
         null,
-        { group: ['product_id'] }
+        { group: ["product_id"] }
       );
     } catch (error) {
       //console.log("catch ex", error);
@@ -88,7 +88,7 @@ class BookingProductRepository extends Repository {
     try {
       //console.log("createBulkProducts ", params);
       return await this.createBulkRecords(params, {
-        updateOnDuplicate: ['id']
+        updateOnDuplicate: ["id"]
       });
     } catch (error) {
       //console.log("catch ex", error);

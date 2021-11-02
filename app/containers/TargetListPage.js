@@ -511,7 +511,17 @@ class TargetListPage extends Component {
               </Button>
             ) : null}
           </div>
-          <div style={{ marginTop: 20, padding: "30px", width: "100%" }}>
+          <div style={{ padding: "30px" }}>
+            <span>Total Orders Financial</span>
+          </div>
+          <div
+            style={{
+              marginTop: 0,
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              width: "100%"
+            }}
+          >
             <Row gutter={12}>
               <Col span={6}>
                 <Card>
@@ -527,6 +537,71 @@ class TargetListPage extends Component {
                     valueStyle={{ color: "#52c41a" }}
                   />
                 </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Total Closed Order Amount"
+                    value={
+                      this.props.closedOrderStats
+                        ? this.props.closedOrderStats.totalAmount
+                        : 0
+                    }
+                    precision={2}
+                    prefix={<Icon type="stock" />}
+                    suffix="Rs"
+                    valueStyle={{ color: "#52c41a" }}
+                  />
+                </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Expense On Closed Order"
+                    value={
+                      this.props.closedOrderStats
+                        ? this.props.closedOrderStats.totalService
+                        : 0
+                    }
+                    precision={2}
+                    prefix={<Icon type="fall" />}
+                    suffix="Rs"
+                    valueStyle={{ color: "#F72230" }}
+                  />
+                </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Total Profit Closed Orders"
+                    value={
+                      this.props.closedOrderStats
+                        ? this.props.closedOrderStats.totalAmount -
+                          this.props.closedOrderStats.totalService
+                        : 0
+                    }
+                    precision={2}
+                    prefix={<Icon type="rise" />}
+                    suffix="Rs"
+                    valueStyle={{ color: "#52c41a" }}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </div>
+          <div style={{ padding: "30px" }}>
+            <span>Completed Orders Financial</span>
+          </div>
+          <div
+            style={{
+              marginTop: 0,
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              width: "100%"
+            }}
+          >
+            <Row gutter={12}>
+              <Col span={6}>
                 <Card>
                   <Statistic
                     title="Complete (To be Closed) Order Count"
@@ -540,6 +615,98 @@ class TargetListPage extends Component {
                     valueStyle={{ color: "#1890ff" }}
                   />
                 </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Complete (To be Closed) Order Amount"
+                    value={
+                      this.props.nonClosedOrdStats
+                        ? this.props.nonClosedOrdStats.totalAmount
+                        : 0
+                    }
+                    precision={2}
+                    prefix={<Icon type="stock" />}
+                    suffix="Rs"
+                    valueStyle={{ color: "#1890ff" }}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </div>
+          <div style={{ padding: "30px" }}>
+            <span>OverDue Orders Financial</span>
+          </div>
+          <div
+            style={{
+              marginTop: 0,
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              width: "100%"
+            }}
+          >
+            <Row gutter={12}>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Current Month Over Due Order Count"
+                    value={
+                      this.props.overDueOrdStats
+                        ? this.props.overDueOrdStats.currentMonthOrders
+                        : 0
+                    }
+                    precision={0}
+                    prefix={<Icon type="shopping-cart" />}
+                    valueStyle={{ color: "#F72230" }}
+                  />
+                </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Overdue Order Count"
+                    value={
+                      this.props.overDueOrdStats
+                        ? this.props.overDueOrdStats.totalOrders
+                        : 0
+                    }
+                    precision={0}
+                    prefix={<Icon type="shopping-cart" />}
+                    valueStyle={{ color: "#F72230" }}
+                  />
+                </Card>
+              </Col>
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Over Due Order Amount"
+                    value={
+                      this.props.overDueOrdStats
+                        ? this.props.overDueOrdStats.overDueAmount
+                        : 0
+                    }
+                    precision={2}
+                    prefix={<Icon type="stock" />}
+                    suffix="Rs"
+                    valueStyle={{ color: "#F72230" }}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </div>
+          <div style={{ padding: "30px" }}>
+            <span>Current Month Orders Financial</span>
+          </div>
+          <div
+            style={{
+              marginTop: 0,
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              width: "100%"
+            }}
+          >
+            <Row gutter={12}>
+              <Col span={6}>
                 <Card>
                   <Statistic
                     title="Current Month Closed Order Count"
@@ -570,38 +737,10 @@ class TargetListPage extends Component {
               <Col span={6}>
                 <Card>
                   <Statistic
-                    title="Total Closed Order Amount"
-                    value={
-                      this.props.closedOrderStats
-                        ? this.props.closedOrderStats.totalAmount
-                        : 0
-                    }
-                    precision={2}
-                    prefix={<Icon type="stock" />}
-                    suffix="Rs"
-                    valueStyle={{ color: "#52c41a" }}
-                  />
-                </Card>
-                <Card>
-                  <Statistic
-                    title="Complete (To be Closed) Order Amount"
-                    value={
-                      this.props.nonClosedOrdStats
-                        ? this.props.nonClosedOrdStats.totalAmount
-                        : 0
-                    }
-                    precision={2}
-                    prefix={<Icon type="stock" />}
-                    suffix="Rs"
-                    valueStyle={{ color: "#1890ff" }}
-                  />
-                </Card>
-                <Card>
-                  <Statistic
                     title="Current Month Closed Order Amount"
                     value={
-                      this.props.closeOrdStats
-                        ? this.props.closeOrdStats.currentMonthAmount
+                      this.props.closedOrderStats
+                        ? this.props.closedOrderStats.currentMonthAmount
                         : 0
                     }
                     precision={2}
@@ -612,33 +751,6 @@ class TargetListPage extends Component {
                 </Card>
               </Col>
               <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Expense On Closed Order"
-                    value={
-                      this.props.closedOrderStats
-                        ? this.props.closedOrderStats.totalService
-                        : 0
-                    }
-                    precision={2}
-                    prefix={<Icon type="fall" />}
-                    suffix="Rs"
-                    valueStyle={{ color: "#F72230" }}
-                  />
-                </Card>
-                <Card>
-                  <Statistic
-                    title="Overdue Order Count"
-                    value={
-                      this.props.overDueOrdStats
-                        ? this.props.overDueOrdStats.totalOrders
-                        : 0
-                    }
-                    precision={0}
-                    prefix={<Icon type="shopping-cart" />}
-                    valueStyle={{ color: "#F72230" }}
-                  />
-                </Card>
                 <Card>
                   <Statistic
                     title="Current Month Expense On Closed Order"
@@ -655,35 +767,6 @@ class TargetListPage extends Component {
                 </Card>
               </Col>
               <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Total Profit Closed Orders"
-                    value={
-                      this.props.closedOrderStats
-                        ? this.props.closedOrderStats.totalAmount -
-                          this.props.closedOrderStats.totalService
-                        : 0
-                    }
-                    precision={2}
-                    prefix={<Icon type="rise" />}
-                    suffix="Rs"
-                    valueStyle={{ color: "#52c41a" }}
-                  />
-                </Card>
-                <Card>
-                  <Statistic
-                    title="Over Due Order Amount"
-                    value={
-                      this.props.overDueOrdStats
-                        ? this.props.overDueOrdStats.overDueAmount
-                        : 0
-                    }
-                    precision={2}
-                    prefix={<Icon type="stock" />}
-                    suffix="Rs"
-                    valueStyle={{ color: "#F72230" }}
-                  />
-                </Card>
                 <Card>
                   <Statistic
                     title="Current Month Profit Closed Orders"
@@ -704,7 +787,11 @@ class TargetListPage extends Component {
                     title="Current Month Over Due Order Amount"
                     value={
                       this.props.overDueOrdStats
-                        ? this.props.overDueOrdStats.overDueAmount
+                        ? -(
+                            this.props.overDueOrdStats
+                              .currentMonthOverDueAmount +
+                            this.props.overDueOrdStats.currentMonthService
+                          )
                         : 0
                     }
                     precision={2}
