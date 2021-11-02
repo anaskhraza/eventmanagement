@@ -1,0 +1,15 @@
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug 2",
+  "autoAttachChildProcesses": true,
+  "stopOnEntry": false,
+  "program": "${workspaceFolder}/distServer.js",
+  "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+  "console": "internalConsole",
+  "runtimeArgs": ["--nolazy"],
+  "env": {
+    "BABEL_ENV": "debug"
+  },
+  "skipFiles": ["node_modules/**/*.js", "<node_internals>/**/*.js"]
+}
