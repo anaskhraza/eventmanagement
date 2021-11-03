@@ -1,26 +1,26 @@
 {
   "development": {
-  "username": "postgres",
-  "password": "postgres",
-  "database": "eventmanagement",
-  "host": "localhost",
-  "dialect": "postgres",
-  "operatorsAliases": false
-},
-"test": {
-  "username": "postgres",
-  "password": "postgres",
-  "database": "eventmanagement",
-  "host": "localhost",
-  "dialect": "postgres",
-  "operatorsAliases": false
-},
-"production": {
-  "username": "postgres",
-  "password": "postgres",
-  "database": "eventmanagement",
-  "host": "localhost",
-  "dialect": "postgres",
-  "operatorsAliases": false
-}
+    "username": "postgres",
+    "password": "postgres",
+    "database": "eventmanagement",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "eventmanagement",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "eventmanagement",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
 }

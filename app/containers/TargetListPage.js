@@ -25,7 +25,7 @@ import {
 import moment from "moment";
 import Highlighter from "react-highlight-words";
 import OrderListPage from "../containers/OrderListPage";
-
+// import ReactECharts from "echarts-for-react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { SpinnerComponent } from "../utils/common";
@@ -40,6 +40,7 @@ import { ColumnDropDown, ColumnButton } from "../components/Common";
 import { AlertCredentialsError } from "../utils/common";
 import { TouchBarSlider } from "electron";
 import { Chart } from "react-google-charts";
+import { options } from "../../api/app/routes";
 const { Option } = Select;
 const { MonthPicker } = DatePicker;
 
@@ -940,21 +941,7 @@ class TargetListPage extends Component {
               alignContent: "center"
             }}
           >
-            <Chart
-              width={"100%"}
-              height={"500px"}
-              chartType="ComboChart"
-              loader={<div>Loading Chart</div>}
-              data={this.props.yearlyOrdStats}
-              options={{
-                title: "Monthly Target Chart",
-                vAxis: { title: "Cups" },
-                hAxis: { title: "Month" },
-                seriesType: "bars",
-                series: { 5: { type: "line" } }
-              }}
-              rootProps={{ "data-testid": "1" }}
-            />
+            <ChartsPerFinance yearlyStats={this.props.yearlyOrdStats} />
           </Card>
           <this.ItemModal />
           <this.SignInModal />
@@ -963,6 +950,82 @@ class TargetListPage extends Component {
     );
   }
 }
+
+const ChartsPerFinance = props => {
+  let months = [];
+  let totalAmountData = [];
+  let serviceCharges = [];
+  let overdueAmt = [];
+  let target = [];
+  const yearlyStats = props.yearlyStats;
+  if (yearlyStats.length > 0) {
+    const yAxis = yearlyStats[0];
+    yearlyStats.shift();
+    yearlyStats.forEach(arr => {
+      months.push(arr[0]);
+      totalAmountData.push(arr[1]);
+      serviceCharges.push(arr[2]);
+      overdueAmt.push(arr[3]);
+      target.push(arr[4]);
+    });
+
+    let series = [
+      {
+        name: yAxis[0],
+        type: "bar",
+        data: totalAmountData
+      },
+      {
+        name: "Service Charges",
+        type: "bar",
+        data: serviceCharges
+      },
+      {
+        name: "OverDue Amount",
+        type: "bar",
+        data: overdueAmt
+      },
+      {
+        name: "Target",
+        type: "bar",
+        data: target
+      }
+    ];
+
+    const option = {
+      title: {
+        text: "Yearly Stats"
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow"
+        }
+      },
+      legend: {},
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, 0.01]
+      },
+      xAxis: {
+        type: "category",
+        data: months
+      },
+      series: series
+    };
+
+    // return <ReactECharts option={option} />;
+  } else {
+    return null;
+  }
+  return null;
+};
 
 function mapStateToProps(state) {
   //console.log("here Create Event Page", state);

@@ -49,7 +49,7 @@ export default function* targetListSync(action) {
     if (response.status === 200) {
       const data = response.body;
       closedOrdStResp = yield call(closedOrderStats, auth);
-      console.log("closedOrdStResp => ",closedOrdStResp)
+      console.log("closedOrdStResp => ", closedOrdStResp);
       nonClosedOrdStResp = yield call(nonClosedOrderStats, auth);
       overDueOrdStResp = yield call(overDueOrderStats, auth);
       closedYrOrdRsp = yield call(closedOrderByYear, action.year, auth);
@@ -121,7 +121,6 @@ const parsedYearlyStats = (data, targetData) => {
     "month"
   );
   respArray.push([
-    "Month",
     "Total Amount",
     "Service Charges",
     "OverDue Amount",
@@ -221,7 +220,7 @@ const getOverDueProcessedData = (resp, stats) => {
     totalService: processedObj.totalService,
     totalOrders: processedObj.processedData.length,
     currentMonthOverDueAmount: currentMonthObj.overDueAmount,
-    currentMonthService: processedObj.totalService,
+    currentMonthService: currentMonthObj.totalService,
     currentMonthOrders: currentMonthObj.processedData.length,
     prevMonthOverDueAmount: previousMonthObj.overDueAmount,
     prevMonthOrders: previousMonthObj.processedData.length,
@@ -233,10 +232,11 @@ const parsedOverDueStats = data => {
   let overDueAmount = 0;
   let totalService = 0;
   let processedData = [];
-
+  let previousYear = new Date().getFullYear();
   let previousMonth = new Date().getMonth() - 1;
   if (previousMonth < 0) {
     previousMonth = 11;
+    previousYear = previousYear - 1;
   }
   if (data && data.length > 0) {
     processedData = data.map(obj => {
@@ -250,8 +250,11 @@ const parsedOverDueStats = data => {
         month: new Date(obj.booking_date).getMonth(),
         year: new Date(obj.booking_date).getFullYear(),
         currentMonth:
-          new Date(obj.booking_date).getMonth() === new Date().getMonth(),
-        previousMonth: new Date(obj.booking_date).getMonth() === previousMonth
+          new Date(obj.booking_date).getMonth() === new Date().getMonth() &&
+          new Date(obj.booking_date).getFullYear() === new Date().getFullYear(),
+        previousMonth:
+          new Date(obj.booking_date).getMonth() === previousMonth &&
+          new Date(obj.booking_date).getFullYear() === previousYear
       };
     });
   }
@@ -266,10 +269,10 @@ const getProcessedData = (resp, stats) => {
 
   let currentMonth = _.groupBy(processedObj.processedData, "currentMonth");
   let previousMonth = _.groupBy(processedObj.processedData, "previousMonth");
-
+  console.log("currentMonth ", currentMonth);
   const currentMonthObj = parsedStats(currentMonth[true]);
   const previousMonthObj = parsedStats(previousMonth[true]);
-
+  console.log("currentMonthObj ", currentMonthObj);
   return {
     totalAmount: processedObj.totalAmount,
     totalService: processedObj.totalService,
@@ -287,14 +290,15 @@ const parsedStats = data => {
   let totalAmount = 0;
   let totalService = 0;
   let processedData = [];
-
+  let previousYear = new Date().getFullYear();
   let previousMonth = new Date().getMonth() - 1;
   if (previousMonth < 0) {
     previousMonth = 11;
+    previousYear = previousYear - 1;
   }
   if (data && data.length > 0) {
     processedData = data.map(obj => {
-      if(obj.received_amount) {
+      if (obj.received_amount) {
         totalAmount = parseFloat(obj.received_amount) + totalAmount;
         totalService = parseFloat(obj.service_expense) + totalService;
       }
@@ -304,8 +308,11 @@ const parsedStats = data => {
         month: new Date(obj.booking_date).getMonth(),
         year: new Date(obj.booking_date).getFullYear(),
         currentMonth:
-          new Date(obj.booking_date).getMonth() === new Date().getMonth(),
-        previousMonth: new Date(obj.booking_date).getMonth() === previousMonth
+          new Date(obj.booking_date).getMonth() === new Date().getMonth() &&
+          new Date(obj.booking_date).getFullYear() === new Date().getFullYear(),
+        previousMonth:
+          new Date(obj.booking_date).getMonth() === previousMonth &&
+          new Date(obj.booking_date).getFullYear() === previousYear
       };
     });
   }

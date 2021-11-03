@@ -75,6 +75,7 @@ export default class OrderController {
   async fetchCompletedOrders(req, res) {
     try {
       var thisMonth = req.query ? req.query.currentMonth : false;
+      console.log("req. query ", req.query);
       var closedCompletedOrd = req.query ? req.query.closeComOrd : false;
       const response = await this.orderServices.getCompletedOrders(
         thisMonth,

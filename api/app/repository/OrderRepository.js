@@ -65,6 +65,7 @@ class OrderRepository extends Repository {
   async getCompletedOrders(thisMonth, closedCompletedOrd) {
     try {
       let objWhere = this.getTodayObject(thisMonth);
+      console.log("OBJ WHERE ", objWhere);
       let objWhere1 = this.getPreviousCompletedOrd(closedCompletedOrd);
       return await this.findAllRecords({
         ...objWhere,
