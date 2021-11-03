@@ -805,7 +805,15 @@ class OrderListPage extends Component {
             <Option key={obj.key}>{obj.value}</Option>
           ))}
         </Select>
-
+        <Button
+          type="primary"
+          onClick={() => this.props.fetchOrders()}
+          icon="refresh"
+          size="medium"
+          style={{ width: 90, marginRight: 8, float: "right" }}
+        >
+          <Icon type="sync" />
+        </Button>
         <Table
           style={{ marginTop: 20 }}
           columns={columns}

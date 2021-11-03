@@ -46,6 +46,8 @@ const { MonthPicker } = DatePicker;
 class TargetListPage extends Component {
   constructor(props) {
     super();
+    const date = new Date(Date.now());
+    console.log(date.toLocaleString("en-US", { month: "short" }));
     this.state = {
       isAddItemModal: false,
       enableAddItem: false,
@@ -56,7 +58,8 @@ class TargetListPage extends Component {
       yearPicker: "",
       targetAmount: "",
       username: "",
-      password: ""
+      password: "",
+      chartMonth: date.toLocaleString("en-US", { month: "short" })
     };
   }
 
@@ -368,6 +371,12 @@ class TargetListPage extends Component {
     }
 
     return arr;
+  };
+
+  onChangeSelectMonth = value => {
+    this.setState({
+      chartMonth: value
+    });
   };
 
   SignInModal = () => {
@@ -936,9 +945,15 @@ class TargetListPage extends Component {
                 alignContent: "center"
               }}
             >
-              <ChartsPerFinance yearlyStats={this.props.yearlyOrdStats} />
+              <ChartsPerFinance yearlyStats={[...this.props.yearlyOrdStats]} />
             </Card>
           </div>
+          <ChartsPerMonthFinance
+            yearlyStats={[...this.props.yearlyOrdStats]}
+            onChangeSelectMonth={this.onChangeSelectMonth}
+            chartMonth={this.state.chartMonth}
+            year={this.state.year}
+          />
           <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
             <Card
               style={{
@@ -956,12 +971,125 @@ class TargetListPage extends Component {
   }
 }
 
+const ChartsPerMonthFinance = props => {
+  let months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  const chartMonth = props.chartMonth;
+  const year = props.year;
+  let totalAmountData = [];
+  let serviceCharges = [];
+  let option = null;
+  let overdueAmt = [];
+  let target = [];
+  const yearlyStats = props.yearlyStats;
+
+  console.log("props yearlyStats ", yearlyStats);
+  const onChangeSelectMonth = props.onChangeSelectMonth;
+  if (yearlyStats.length > 0) {
+    const yAxis = yearlyStats[0];
+    yearlyStats.shift();
+    yearlyStats.forEach(arr => {
+      months.push(arr[0]);
+      totalAmountData.push(arr[1]);
+      serviceCharges.push(arr[2]);
+      overdueAmt.push(arr[3]);
+      target.push(arr[4]);
+    });
+    const indexMonth = months.indexOf(chartMonth);
+    const totalAmountMonth = totalAmountData[indexMonth];
+    const serviceChargesMonth = serviceCharges[indexMonth];
+    const overdueMonth = overdueAmt[indexMonth];
+    const targetMonth = target[indexMonth];
+    option = {
+      tooltip: {
+        trigger: "item"
+      },
+      legend: {
+        top: "5%",
+        left: "center"
+      },
+      series: [
+        {
+          name: "Access From",
+          type: "pie",
+          radius: ["40%", "70%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: "center"
+          },
+
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: totalAmountMonth, name: "Total Amount" },
+            { value: serviceChargesMonth, name: "Service Charges" },
+            { value: overdueMonth, name: "OverDue" }
+          ]
+        }
+      ]
+    };
+  } else {
+    return null;
+  }
+  return (
+    <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+      <Card
+        title="Target List"
+        style={{
+          width: "100%",
+          height: "auto",
+          maxHeight: 1200,
+          marginTop: 20,
+          textAlign: "center",
+          alignContent: "center"
+        }}
+      >
+        <div>
+          <Select
+            showSearch
+            style={{ width: 400, top: 10, display: "inline-block" }}
+            placeholder="Select Month"
+            onChange={onChangeSelectMonth}
+            value={chartMonth}
+          >
+            {months.map(obj => (
+              <Option key={obj}>
+                {obj}
+                {` ${year}`}
+              </Option>
+            ))}
+          </Select>
+          <div>
+            <ReactECharts option={option} />;
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
 const ChartsPerFinance = props => {
   let months = [];
   let totalAmountData = [];
   let serviceCharges = [];
   let overdueAmt = [];
   let target = [];
+
   const yearlyStats = props.yearlyStats;
   if (yearlyStats.length > 0) {
     const yAxis = yearlyStats[0];

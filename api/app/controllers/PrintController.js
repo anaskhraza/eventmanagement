@@ -1,14 +1,14 @@
-import _ from 'lodash';
-import db from '../models';
-import moment from 'moment';
-import fs from 'fs';
-import pdf from 'html-pdf';
-import ProductServices from '../services/ProductServices';
+import _ from "lodash";
+import db from "../models";
+import moment from "moment";
+import fs from "fs";
+import pdf from "html-pdf";
+import ProductController from "../controllers/ProductController";
 
 export default class PrintController {
   constructor() {
     this.db = db;
-
+    this.productController = new ProductController();
     this.printPDF = this.printPDF.bind(this);
   }
 
@@ -21,22 +21,22 @@ export default class PrintController {
     //     if (err) throw err;
     //     console.log('Saved!');
     // });
-    var options = { format: 'Letter' };
+    var options = { format: "Letter" };
 
     pdf
       .create(unescape(htmlBody), options)
-      .toFile('../../../invoices/' + eventCode + '.pdf', function(err, res) {
+      .toFile("../../../invoices/" + eventCode + ".pdf", function(err, res) {
         if (err) return console.log(err);
         console.log(res); // { filename: '/app/businesscard.pdf' }
       });
-    res.send({ status: '202', reposne: 'Suucess' });
+    res.send({ status: "202", reposne: "Suucess" });
   }
 
   async getHtmlTemplate() {
-    const path = require('path').join(__dirname, '..', '/assets/print.html');
+    const path = require("path").join(__dirname, "..", "/assets/print.html");
 
-    console.log('dir templeate', path);
-    return fs.readFileSync(path, 'utf-8');
+    console.log("dir templeate", path);
+    return fs.readFileSync(path, "utf-8");
   }
 
   getCustomerObj(dataObj) {
@@ -70,6 +70,12 @@ export default class PrintController {
       const customer = this.getCustomerObj(dataObj);
       const order = this.getOrderObj(dataObj);
 
+      if (dataObj.fetchOrderItems) {
+        dataObj.orderedData = await this.productController.fetchPrintOrderedProductByOrderId(
+          order.id
+        );
+      }
+
       const orderCount = dataObj.orderedData.length;
       const orderedData = new Array(Math.ceil(dataObj.orderedData.length / 3))
         .fill()
@@ -80,23 +86,23 @@ export default class PrintController {
         order,
         orderedData,
         orderCount,
-        todayDate: moment().format('DD, MMM, YYYY')
+        todayDate: moment().format("DD, MMM, YYYY")
       };
 
       const htmlBody = compiledTemplate(data);
 
-      var options = { format: 'Letter' };
+      var options = { format: "Letter" };
 
       pdf
         .create(unescape(htmlBody), options)
-        .toFile('../invoices/1000' + order.id + '.pdf', function(err, resp) {
+        .toFile("../invoices/1000" + order.id + ".pdf", function(err, resp) {
           if (err) return res.send(204, err);
           res.send(200, resp);
         });
     } catch (ex) {
       console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 }

@@ -236,6 +236,8 @@ const parsedOverDueStats = data => {
   let processedData = [];
   let previousYear = new Date().getFullYear();
   let previousMonth = new Date().getMonth() - 1;
+  console.log("previousMonth ", previousMonth);
+  console.log("previousYear ", previousYear);
   if (previousMonth < 0) {
     previousMonth = 11;
     previousYear = previousYear - 1;

@@ -18,7 +18,7 @@ export default function* printSync(action) {
   let response;
   try {
     response = yield call(printOrder, action.data);
-    console.log("response -> ", response);
+
     if (response.status === 200) {
       const data = response.body;
       yield put(orderAction.printOrderFulfilled(data));

@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import db from '../models';
-import ProductServices from '../services/ProductServices';
-import moment from 'moment';
+import _ from "lodash";
+import db from "../models";
+import ProductServices from "../services/ProductServices";
+import moment from "moment";
 export default class ProductController {
   constructor() {
     this.db = db;
@@ -39,7 +39,7 @@ export default class ProductController {
       const eDate = moment(dateObj.endDate);
       const sDate = moment(dateObj.startDate);
 
-      var diffDays = eDate.diff(sDate, 'days');
+      var diffDays = eDate.diff(sDate, "days");
       if (diffDays == 0) {
         diffDays = 1;
       }
@@ -72,11 +72,11 @@ export default class ProductController {
         const finalResp = this._dataObjectForProducts(response, dateObj);
         res.send(200, finalResp);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("error -> ", ex);
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -88,10 +88,10 @@ export default class ProductController {
       if (response) {
         res.send(200, response);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -104,12 +104,12 @@ export default class ProductController {
       if (productReponse) {
         res.send(200, productReponse);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
-      console.log('ex ', ex);
+      console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -121,11 +121,11 @@ export default class ProductController {
       if (response) {
         res.send(200, response);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("ex -> ", ex);
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -140,12 +140,12 @@ export default class ProductController {
       if (productReponse.length > 0) {
         res.send(200, productReponse);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -166,7 +166,7 @@ export default class ProductController {
           const eDate = moment(obj.event_booking_start);
           const sDate = moment(obj.event_booking_end);
 
-          var diffDays = eDate.diff(sDate, 'days');
+          var diffDays = eDate.diff(sDate, "days");
           if (diffDays == 0) {
             diffDays = 1;
           }
@@ -182,10 +182,47 @@ export default class ProductController {
         });
         res.send(200, dataResp);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
+    }
+  }
+
+  async fetchPrintOrderedProductByOrderId(orderId) {
+    try {
+      var orderId = orderId;
+
+      const response = await this.productServices.getOrderedProductsByOrderId(
+        orderId
+      );
+
+      if (response) {
+        const dataResp = _.map(response, obj => {
+          const eDate = moment(obj.event_booking_start);
+          const sDate = moment(obj.event_booking_end);
+
+          var diffDays = sDate.diff(eDate, "days");
+          if (diffDays == 0) {
+            diffDays = 1;
+          }
+          return {
+            ...obj,
+            name: obj.Product_Booking_Key.name,
+            quantity_ordered: obj.order_quantity,
+            no_of_days: diffDays,
+            rate: obj.Product_Booking_Key.rate,
+            price: obj.Product_Booking_Key.rate * obj.order_quantity * diffDays,
+            event_booking_start: obj.event_booking_start,
+            event_booking_end: obj.event_booking_end
+          };
+        });
+        return dataResp;
+      } else {
+        return [];
+      }
+    } catch (ex) {
+      return [];
     }
   }
 
@@ -205,7 +242,7 @@ export default class ProductController {
       if (response) {
         res.send(200, response);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
       // }
       // else {
@@ -213,7 +250,7 @@ export default class ProductController {
       // }
     } catch (ex) {
       //console.log("ex -> ", ex);
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -222,10 +259,10 @@ export default class ProductController {
     const products = dataObj.selectedProducts;
     const modifiedProducts = dataObj.modifiedProducts;
 
-    const modifiedProducts1 = _.groupBy(modifiedProducts, 'id');
+    const modifiedProducts1 = _.groupBy(modifiedProducts, "id");
     const keysModified = _.keys(modifiedProducts1);
-    let startDate = '';
-    let endDate = '';
+    let startDate = "";
+    let endDate = "";
     const productIds = _.compact(
       _.map(products, obj => {
         const productId = parseInt(obj.id, 10);
@@ -260,13 +297,13 @@ export default class ProductController {
 
     const modProdQtyGroupBy = _.groupBy(
       modifiedProductOrdQuantity,
-      'product_id'
+      "product_id"
     );
     const selectProdOrdQtyGroupBy = _.groupBy(
       selectedProductOrdQuantity,
-      'product_id'
+      "product_id"
     );
-    const allProductQtyGroupBy = _.groupBy(allProductQuantity, 'id');
+    const allProductQtyGroupBy = _.groupBy(allProductQuantity, "id");
 
     modProdOrdQty = _.keys(modProdQtyGroupBy);
     selectProdOrdQty = _.keys(selectProdOrdQtyGroupBy);
@@ -344,12 +381,12 @@ export default class ProductController {
       if (productResp.length > 0) {
         res.send(200, productResp);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -386,12 +423,12 @@ export default class ProductController {
       if (bulkProducts.length > 0) {
         res.send(200, bulkProducts);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -406,12 +443,12 @@ export default class ProductController {
       if (bulkProducts.length > 0) {
         res.send(200, bulkProducts);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
       //console.log("ex ", ex);
 
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -426,10 +463,10 @@ export default class ProductController {
       if (response) {
         res.send(200, response);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
     } catch (ex) {
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
@@ -449,7 +486,7 @@ export default class ProductController {
       if (response) {
         res.send(200, response);
       } else {
-        res.send(204, 'error in fetching data');
+        res.send(204, "error in fetching data");
       }
       // }
       // else {
@@ -457,7 +494,7 @@ export default class ProductController {
       // }
     } catch (ex) {
       //console.log("ex -> ", ex);
-      res.send(400, 'some error occured');
+      res.send(400, "some error occured");
     }
   }
 
