@@ -42,6 +42,7 @@ class OrderListPage extends Component {
   constructor(props) {
     super();
     this.state = {
+      searchValue: "",
       order_no: "",
       items_expense: "",
       other_expense: "",
@@ -118,6 +119,7 @@ class OrderListPage extends Component {
       isShow: false,
       received_amount: 0
     });
+    this.props.fetchOrders(this.state.searchValue);
   };
 
   handleVoidOrder = (record, e) => {
@@ -138,6 +140,7 @@ class OrderListPage extends Component {
       isVoidModalShow: false,
       received_amount: 0
     });
+    this.props.fetchOrders(this.state.searchValue);
   };
 
   markComplete = (record, e) => {
@@ -155,6 +158,7 @@ class OrderListPage extends Component {
     const orderId = record.id;
 
     this.props.updateOrder(orderId, data, true);
+    this.props.fetchOrders(this.state.searchValue);
   };
 
   handleCancel = e => {
@@ -256,6 +260,9 @@ class OrderListPage extends Component {
   }
 
   onChangeSelectBox = value => {
+    this.setState({
+      searchValue: value
+    });
     let itemsPromise = this.props.fetchOrders(value);
   };
 

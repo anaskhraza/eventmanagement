@@ -91,9 +91,6 @@ class OrderRepository extends Repository {
 
     try {
       return await this.findAllRecords({
-        is_closed: {
-          [Sequelize.Op.is]: true
-        },
         is_void: {
           [Sequelize.Op.not]: true
         },
@@ -110,7 +107,6 @@ class OrderRepository extends Repository {
   async getClosedOrders(thisMonth) {
     try {
       let objWhere = this.getTodayObject(thisMonth);
-      console.log("here -> ", objWhere);
       return await this.findAllRecords({
         ...objWhere,
         is_closed: {

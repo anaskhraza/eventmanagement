@@ -25,7 +25,7 @@ import {
 import moment from "moment";
 import Highlighter from "react-highlight-words";
 import OrderListPage from "../containers/OrderListPage";
-
+import ReactECharts from "echarts-for-react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { SpinnerComponent } from "../utils/common";
@@ -868,94 +868,86 @@ class TargetListPage extends Component {
               </Button>
             ) : null}
           </div>
-          <Card
-            title="Target List"
-            style={{
-              width: "100%",
-              height: "auto",
-              maxHeight: 1200,
-              marginTop: 20,
-              textAlign: "center",
-              alignContent: "center"
-            }}
-          >
-            <Select
-              showSearch
-              style={{ width: 400, top: 10, display: "inline-block" }}
-              placeholder="Select Year"
-              optionFilterProp="children"
-              onChange={this.onChangeSelectBox}
-              value={this.state.year}
-              filterOption={(input, option) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {years.map(obj => (
-                <Option key={obj.value}>{obj.value}</Option>
-              ))}
-            </Select>
-            <Button
-              key="addItem"
-              onClick={e =>
-                this.setState({
-                  isAddItemModal: true,
-                  isAddCategoryModal: false
-                })
-              }
-              type="primary"
+          <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+            <Card
+              title="Target List"
               style={{
-                width: 200,
-                top: 10,
-                display: "inline-block",
-                marginLeft: 20
+                width: "100%",
+                height: "auto",
+                maxHeight: 1200,
+                marginTop: 20,
+                textAlign: "center",
+                alignContent: "center"
               }}
             >
-              Add Item
-            </Button>
-            <Table
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={this.props.itemData}
-              loading={this.props.fetching}
-              scroll={{ y: 400 }}
-            />
-          </Card>
-          <Card
-            style={{
-              marginTop: 20
-            }}
-          >
-            <OrderListPage showStatsButton={true} />
-          </Card>
-          <Card
-            title="Monthly Chart"
-            style={{
-              width: "100%",
-              height: "auto",
-              maxHeight: 1200,
-              marginTop: 20,
-              textAlign: "center",
-              alignContent: "center"
-            }}
-          >
-            <Chart
-              width={"100%"}
-              height={"500px"}
-              chartType="ComboChart"
-              loader={<div>Loading Chart</div>}
-              data={this.props.yearlyOrdStats}
-              options={{
-                title: "Monthly Target Chart",
-                vAxis: { title: "Cups" },
-                hAxis: { title: "Month" },
-                seriesType: "bars",
-                series: { 5: { type: "line" } }
+              <Select
+                showSearch
+                style={{ width: 400, top: 10, display: "inline-block" }}
+                placeholder="Select Year"
+                optionFilterProp="children"
+                onChange={this.onChangeSelectBox}
+                value={this.state.year}
+                filterOption={(input, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {years.map(obj => (
+                  <Option key={obj.value}>{obj.value}</Option>
+                ))}
+              </Select>
+              <Button
+                key="addItem"
+                onClick={e =>
+                  this.setState({
+                    isAddItemModal: true,
+                    isAddCategoryModal: false
+                  })
+                }
+                type="primary"
+                style={{
+                  width: 200,
+                  top: 10,
+                  display: "inline-block",
+                  marginLeft: 20
+                }}
+              >
+                Add Item
+              </Button>
+              <Table
+                style={{ marginTop: 20 }}
+                columns={columns}
+                dataSource={this.props.itemData}
+                loading={this.props.fetching}
+                scroll={{ y: 400 }}
+              />
+            </Card>
+          </div>
+          <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+            <Card
+              title="Monthly Chart"
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: 1200,
+                marginTop: 20,
+                textAlign: "center",
+                alignContent: "center"
               }}
-              rootProps={{ "data-testid": "1" }}
-            />
-          </Card>
+            >
+              <ChartsPerFinance yearlyStats={this.props.yearlyOrdStats} />
+            </Card>
+          </div>
+          <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+            <Card
+              style={{
+                marginTop: 20
+              }}
+            >
+              <OrderListPage showStatsButton={true} />
+            </Card>
+          </div>
           <this.ItemModal />
           <this.SignInModal />
         </div>
@@ -963,6 +955,82 @@ class TargetListPage extends Component {
     );
   }
 }
+
+const ChartsPerFinance = props => {
+  let months = [];
+  let totalAmountData = [];
+  let serviceCharges = [];
+  let overdueAmt = [];
+  let target = [];
+  const yearlyStats = props.yearlyStats;
+  if (yearlyStats.length > 0) {
+    const yAxis = yearlyStats[0];
+    yearlyStats.shift();
+    yearlyStats.forEach(arr => {
+      months.push(arr[0]);
+      totalAmountData.push(arr[1]);
+      serviceCharges.push(arr[2]);
+      overdueAmt.push(arr[3]);
+      target.push(arr[4]);
+    });
+
+    let series = [
+      {
+        name: yAxis[0],
+        type: "bar",
+        data: totalAmountData
+      },
+      {
+        name: "Service Charges",
+        type: "bar",
+        data: serviceCharges
+      },
+      {
+        name: "OverDue Amount",
+        type: "bar",
+        data: overdueAmt
+      },
+      {
+        name: "Target",
+        type: "bar",
+        data: target
+      }
+    ];
+
+    const option = {
+      title: {
+        text: "Yearly Stats"
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow"
+        }
+      },
+      legend: {},
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, 0.01]
+      },
+      xAxis: {
+        type: "category",
+        data: months
+      },
+      series: series
+    };
+
+    return <ReactECharts option={option} />;
+  } else {
+    return null;
+  }
+  return null;
+};
 
 function mapStateToProps(state) {
   //console.log("here Create Event Page", state);
