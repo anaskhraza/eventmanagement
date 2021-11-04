@@ -11,6 +11,7 @@ const userController = new UserController();
 //console.log("here ", "here");
 router.get("/", orderController.fetchAllOrders);
 router.get("/id/:id", orderController.fetchOneOrder);
+router.get("/customerId/:id", orderController.fetchCustomerOrders);
 router.get("/completed", orderController.fetchCompletedOrders);
 router.get("/closed", orderController.fetchClosedOrders);
 

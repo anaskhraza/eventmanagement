@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 import routes from "../constants/routes";
 import {
@@ -934,19 +934,7 @@ class TargetListPage extends Component {
             </Card>
           </div>
           <div style={{ paddingLeft: "30px", paddingRight: "30px" }}>
-            <Card
-              title="Monthly Chart"
-              style={{
-                width: "100%",
-                height: "auto",
-                maxHeight: 1200,
-                marginTop: 20,
-                textAlign: "center",
-                alignContent: "center"
-              }}
-            >
-              <ChartsPerFinance yearlyStats={[...this.props.yearlyOrdStats]} />
-            </Card>
+            <ChartsPerFinance yearlyStats={[...this.props.yearlyOrdStats]} />
           </div>
           <ChartsPerMonthFinance
             yearlyStats={[...this.props.yearlyOrdStats]}
@@ -994,9 +982,12 @@ const ChartsPerMonthFinance = props => {
   let option = null;
   let overdueAmt = [];
   let target = [];
-  const yearlyStats = props.yearlyStats;
+  let totalAmountMonth;
+  let serviceChargesMonth;
+  let overdueMonth;
+  let targetMonth;
+  let yearlyStats = props.yearlyStats;
 
-  console.log("props yearlyStats ", yearlyStats);
   const onChangeSelectMonth = props.onChangeSelectMonth;
   if (yearlyStats.length > 0) {
     const yAxis = yearlyStats[0];
@@ -1009,10 +1000,10 @@ const ChartsPerMonthFinance = props => {
       target.push(arr[4]);
     });
     const indexMonth = months.indexOf(chartMonth);
-    const totalAmountMonth = totalAmountData[indexMonth];
-    const serviceChargesMonth = serviceCharges[indexMonth];
-    const overdueMonth = overdueAmt[indexMonth];
-    const targetMonth = target[indexMonth];
+    totalAmountMonth = totalAmountData[indexMonth];
+    serviceChargesMonth = serviceCharges[indexMonth];
+    overdueMonth = overdueAmt[indexMonth];
+    targetMonth = target[indexMonth];
     option = {
       tooltip: {
         trigger: "item"
@@ -1036,7 +1027,7 @@ const ChartsPerMonthFinance = props => {
             show: false
           },
           data: [
-            { value: totalAmountMonth, name: "Total Amount" },
+            { value: totalAmountMonth, name: "Recieved Amount" },
             { value: serviceChargesMonth, name: "Service Charges" },
             { value: overdueMonth, name: "OverDue" }
           ]
@@ -1074,10 +1065,160 @@ const ChartsPerMonthFinance = props => {
               </Option>
             ))}
           </Select>
-          <div>
-            <ReactECharts option={option} />;
-          </div>
         </div>
+        <Row style={{ paddingTop: "10px" }}>
+          <Col span={12}>
+            <ReactECharts option={option} />
+          </Col>
+          <Col span={12}>
+            <div
+              style={{
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Row>
+                <Col span={6}>
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      display: "flex"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        backgroundColor: "#4359b9",
+                        padding: 10,
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>
+                        Recieved Amount
+                      </label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {totalAmountMonth}
+                      </label>
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#f7bf47",
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>Service Amount</label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {serviceChargesMonth}
+                      </label>
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#81c463",
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>OverDue Amount</label>
+                      <label style={{ color: "#FFFFFF" }}>{overdueMonth}</label>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={6}>
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      display: "flex"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#d8494e",
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>Total Amount</label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {totalAmountMonth + overdueMonth}
+                      </label>
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#fe9a18",
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>
+                        Current Wallet Profit
+                      </label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {totalAmountMonth - serviceChargesMonth}
+                      </label>
+                    </div>
+
+                    <div
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#1878fe",
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
+                      <label style={{ color: "#FFFFFF" }}>
+                        Estimated Profit
+                      </label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {totalAmountMonth + overdueMonth - serviceChargesMonth}
+                      </label>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+        </Row>
       </Card>
     </div>
   );
@@ -1086,10 +1227,11 @@ const ChartsPerMonthFinance = props => {
 const ChartsPerFinance = props => {
   let months = [];
   let totalAmountData = [];
+  let totAmount = [];
   let serviceCharges = [];
   let overdueAmt = [];
   let target = [];
-
+  let profit = [];
   const yearlyStats = props.yearlyStats;
   if (yearlyStats.length > 0) {
     const yAxis = yearlyStats[0];
@@ -1100,11 +1242,13 @@ const ChartsPerFinance = props => {
       serviceCharges.push(arr[2]);
       overdueAmt.push(arr[3]);
       target.push(arr[4]);
+      totAmount.push(arr[1] + arr[3]);
+      profit.push(arr[1] + arr[3] - arr[2]);
     });
 
     let series = [
       {
-        name: yAxis[0],
+        name: "Recieved Amount",
         type: "bar",
         data: totalAmountData
       },
@@ -1119,8 +1263,21 @@ const ChartsPerFinance = props => {
         data: overdueAmt
       },
       {
-        name: "Target",
+        name: "Total Amount",
+        type: "line",
+        data: totAmount
+      }
+    ];
+
+    let series1 = [
+      {
+        name: "Profit",
         type: "bar",
+        data: profit
+      },
+      {
+        name: "Target",
+        type: "line",
         data: target
       }
     ];
@@ -1153,7 +1310,64 @@ const ChartsPerFinance = props => {
       series: series
     };
 
-    return <ReactECharts option={option} />;
+    const option1 = {
+      title: {
+        text: "Targets and Profit"
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow"
+        }
+      },
+      legend: {},
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, 0.01]
+      },
+      xAxis: {
+        type: "category",
+        data: months
+      },
+      series: series1
+    };
+
+    return (
+      <Fragment>
+        <Card
+          title="Monthly Chart"
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: 1200,
+            marginTop: 20,
+            textAlign: "center",
+            alignContent: "center"
+          }}
+        >
+          <ReactECharts option={option} />
+        </Card>
+        <Card
+          title="Monthly Chart"
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: 1200,
+            marginTop: 20,
+            textAlign: "center",
+            alignContent: "center"
+          }}
+        >
+          <ReactECharts option={option1} />
+        </Card>
+      </Fragment>
+    );
   } else {
     return null;
   }

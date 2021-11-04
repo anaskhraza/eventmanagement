@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import routes from "../constants/routes";
 import {
@@ -25,12 +25,17 @@ import { connect } from "react-redux";
 import { SpinnerComponent } from "../utils/common";
 import { fetchCustomers } from "../actions/customers";
 import { ColumnDropDown, ColumnButtonDraft } from "../components/Common";
+import { TouchBarScrubber } from "electron";
+import OrderListPage from "../containers/OrderListPage";
 
 class CustomerLListPage extends Component {
   constructor(props) {
     super();
     this.state = {
-      searchText: ""
+      searchText: "",
+      selectedCustomerId: "",
+      showCustomerPage: true,
+      showOrderPage: false
     };
   }
 
@@ -140,11 +145,12 @@ class CustomerLListPage extends Component {
   };
 
   render() {
+    let OrderCard = null;
     const columns = [
       {
         title: "Customer Name",
         dataIndex: "customer_name",
-        width: "30%",
+        width: "20%",
         ...this.getColumnSearchProps("customer_name")
       },
       {
@@ -162,36 +168,105 @@ class CustomerLListPage extends Component {
       {
         title: "Customer Address",
         dataIndex: "customer_address",
-        width: "30%"
+        width: "15%"
       },
       {
         title: "Order Count",
         dataIndex: "order_customer_id.countTask",
         width: "10%"
+      },
+      {
+        title: "Show Orders",
+        key: "seestats",
+        width: "15%",
+        render: (text, record) => (
+          <Button
+            type="danger"
+            onClick={e =>
+              this.setState({
+                selectedCustomerId: record.id,
+                showOrderPage: true,
+                showCustomerPage: false
+              })
+            }
+          >
+            Show Orders
+          </Button>
+        )
       }
     ];
     const itemCount = this.props.itemData ? this.props.itemData.length : 0;
     const count = `Customer Count: ${itemCount}`;
+    // if (this.state.selectedCustomerId) {
+    //   OrderCard = (
 
+    //   );
+    // }
+    console.log("customer Id ", this.state.selectedCustomerId);
     return (
-      <Card
-        title="Customer List"
-        extra={count}
-        style={{
-          width: "100%",
-          height: "auto",
-          maxHeight: 1200,
-          textAlign: "center",
-          alignContent: "center"
-        }}
-      >
-        <Table
-          columns={columns}
-          dataSource={this.props.itemData}
-          loading={this.props.fetching}
-          scroll={{ y: 400 }}
-        />
-      </Card>
+      <Fragment>
+        <div
+          style={{
+            width: "auto",
+            maxHeight: "100%",
+            overflowY: "auto",
+            position: "absolute"
+          }}
+        >
+          <Card
+            title="Customer List"
+            extra={count}
+            hidden={!this.state.showCustomerPage}
+            style={{
+              width: "100%",
+              height: "auto",
+              maxHeight: 1200,
+              textAlign: "center",
+              alignContent: "center"
+            }}
+          >
+            <Table
+              columns={columns}
+              dataSource={this.props.itemData}
+              loading={this.props.fetching}
+              scroll={{ y: 400 }}
+            />
+          </Card>
+          {this.state.selectedCustomerId && this.state.showOrderPage ? (
+            <Fragment>
+              <div
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  maxHeight: 1200,
+                  textAlign: "center",
+                  alignContent: "center",
+                  paddingBottom: 20
+                }}
+              >
+                <Button
+                  type="danger"
+                  onClick={() =>
+                    this.setState({
+                      showOrderPage: false,
+                      showCustomerPage: true
+                    })
+                  }
+                  size="large"
+                  style={{
+                    width: 200,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  Back
+                </Button>
+              </div>
+              <OrderListPage customerListId={this.state.selectedCustomerId} />
+            </Fragment>
+          ) : null}
+        </div>
+      </Fragment>
     );
   }
 }

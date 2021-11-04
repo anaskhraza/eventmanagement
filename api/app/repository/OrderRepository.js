@@ -27,6 +27,27 @@ class OrderRepository extends Repository {
     }
   }
 
+  async getOrdersByCustomer(customers, customerIds) {
+    try {
+      const include = [{ model: customers, as: "order_customer" }];
+      return await this.findAllRecords(
+        {
+          customer_id: {
+            [Sequelize.Op.eq]: customerIds
+          },
+          is_void: {
+            [Sequelize.Op.not]: true
+          }
+        },
+        null,
+        include
+      );
+    } catch (error) {
+      //console.log("catch ex", error);
+      throw error;
+    }
+  }
+
   getTodayObject = thisMonth => {
     let objWhere = {};
 
@@ -62,23 +83,28 @@ class OrderRepository extends Repository {
     return objWhere;
   };
 
-  async getCompletedOrders(thisMonth, closedCompletedOrd) {
+  async getCompletedOrders(customers, thisMonth, closedCompletedOrd) {
     try {
       let objWhere = this.getTodayObject(thisMonth);
       let objWhere1 = this.getPreviousCompletedOrd(closedCompletedOrd);
-      return await this.findAllRecords({
-        ...objWhere,
-        ...objWhere1,
-        complete: {
-          [Sequelize.Op.is]: true
+      const include = [{ model: customers, as: "order_customer" }];
+      return await this.findAllRecords(
+        {
+          ...objWhere,
+          ...objWhere1,
+          complete: {
+            [Sequelize.Op.is]: true
+          },
+          is_void: {
+            [Sequelize.Op.not]: true
+          },
+          is_closed: {
+            [Sequelize.Op.not]: true
+          }
         },
-        is_void: {
-          [Sequelize.Op.not]: true
-        },
-        is_closed: {
-          [Sequelize.Op.not]: true
-        }
-      });
+        null,
+        include
+      );
     } catch (error) {
       //console.log("catch ex", error);
       throw error;
@@ -104,18 +130,23 @@ class OrderRepository extends Repository {
     }
   }
 
-  async getClosedOrders(thisMonth) {
+  async getClosedOrders(customers, thisMonth) {
     try {
       let objWhere = this.getTodayObject(thisMonth);
-      return await this.findAllRecords({
-        ...objWhere,
-        is_closed: {
-          [Sequelize.Op.is]: true
+      const include = [{ model: customers, as: "order_customer" }];
+      return await this.findAllRecords(
+        {
+          ...objWhere,
+          is_closed: {
+            [Sequelize.Op.is]: true
+          },
+          is_void: {
+            [Sequelize.Op.not]: true
+          }
         },
-        is_void: {
-          [Sequelize.Op.not]: true
-        }
-      });
+        null,
+        include
+      );
     } catch (error) {
       console.log("catch ex", error);
       throw error;
@@ -154,16 +185,21 @@ class OrderRepository extends Repository {
     }
   }
 
-  async getOverDueOrders(thisMonth) {
+  async getOverDueOrders(customers, thisMonth) {
     try {
       let objWhere = this.getTodayObject(thisMonth);
+      const include = [{ model: customers, as: "order_customer" }];
       //console.log("fetchOverdueOrders -> ", "is_due_amount");
-      return await this.findAllRecords({
-        ...objWhere,
-        is_due_amount: {
-          [Sequelize.Op.ne]: "0"
-        }
-      });
+      return await this.findAllRecords(
+        {
+          ...objWhere,
+          is_due_amount: {
+            [Sequelize.Op.ne]: "0"
+          }
+        },
+        null,
+        include
+      );
     } catch (error) {
       //console.log("catch ex", error);
       throw error;
@@ -188,17 +224,22 @@ class OrderRepository extends Repository {
     }
   }
 
-  async getIncomingOrders() {
+  async getIncomingOrders(customers) {
+    const include = [{ model: customers, as: "order_customer" }];
     const date2 = moment()
       .add(5, "days")
       .format("YYYY-MM-DD");
     const date1 = moment().format("YYYY-MM-DD");
     try {
-      return await this.findAllRecords({
-        event_date_start: {
-          [Sequelize.Op.between]: [date1, date2]
-        }
-      });
+      return await this.findAllRecords(
+        {
+          event_date_start: {
+            [Sequelize.Op.between]: [date1, date2]
+          }
+        },
+        null,
+        include
+      );
     } catch (error) {
       //console.log("catch ex", error);
       throw error;

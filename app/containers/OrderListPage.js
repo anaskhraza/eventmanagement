@@ -62,6 +62,7 @@ class OrderListPage extends Component {
       searchCategory: "order_no",
       filterInfo: "",
       disableVoided: true,
+      customerSearchById: "",
       key: "",
       id: "",
       printURL: ""
@@ -69,8 +70,11 @@ class OrderListPage extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    console.log("getDerivedStateFromProps ", props);
     if (props.print && props.print.url && props.print.url.filename) {
       return { printURL: props.print.url.filename };
+    } else if (props.customerListId) {
+      return { customerSearchById: props.customerListId };
     } else {
       return null;
     }
@@ -119,7 +123,13 @@ class OrderListPage extends Component {
       isShow: false,
       received_amount: 0
     });
-    this.props.fetchOrders(this.state.searchValue);
+    if (this.state.customerSearchById) {
+      let itemsPromise = this.props.fetchOrders(
+        `customerId/${this.state.customerSearchById}`
+      );
+    } else {
+      this.props.fetchOrders(this.state.searchValue);
+    }
   };
 
   handleVoidOrder = (record, e) => {
@@ -140,7 +150,13 @@ class OrderListPage extends Component {
       isVoidModalShow: false,
       received_amount: 0
     });
-    this.props.fetchOrders(this.state.searchValue);
+    if (this.state.customerSearchById) {
+      let itemsPromise = this.props.fetchOrders(
+        `customerId/${this.state.customerSearchById}`
+      );
+    } else {
+      this.props.fetchOrders(this.state.searchValue);
+    }
   };
 
   markComplete = (record, e) => {
@@ -158,7 +174,13 @@ class OrderListPage extends Component {
     const orderId = record.id;
 
     this.props.updateOrder(orderId, data, true);
-    this.props.fetchOrders(this.state.searchValue);
+    if (this.state.customerSearchById) {
+      let itemsPromise = this.props.fetchOrders(
+        `customerId/${this.state.customerSearchById}`
+      );
+    } else {
+      this.props.fetchOrders(this.state.searchValue);
+    }
   };
 
   handleCancel = e => {
@@ -256,7 +278,13 @@ class OrderListPage extends Component {
   };
 
   componentDidMount() {
-    let itemsPromise = this.props.fetchOrders();
+    if (this.state.customerSearchById) {
+      let itemsPromise = this.props.fetchOrders(
+        `customerId/${this.state.customerSearchById}`
+      );
+    } else {
+      let itemsPromise = this.props.fetchOrders();
+    }
   }
 
   onChangeSelectBox = value => {
@@ -789,28 +817,45 @@ class OrderListPage extends Component {
             showIcon
           />
         ) : null}
-        <Select
-          showSearch
-          allowClear={true}
-          style={{ width: 600, paddingTop: 10 }}
-          placeholder="Select Search Mechanism"
-          optionFilterProp="children"
-          onChange={this.onChangeSelectBox}
-          filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-            0
-          }
-        >
-          {selectBox.map(obj => (
-            <Option key={obj.key}>{obj.value}</Option>
-          ))}
-        </Select>
+        {!this.state.customerSearchById ? (
+          <Select
+            showSearch
+            allowClear={true}
+            style={{ width: 600, paddingTop: 10 }}
+            placeholder="Select Search Mechanism"
+            optionFilterProp="children"
+            onChange={this.onChangeSelectBox}
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {selectBox.map(obj => (
+              <Option key={obj.key}>{obj.value}</Option>
+            ))}
+          </Select>
+        ) : null}
+
         <Button
           type="primary"
-          onClick={() => this.props.fetchOrders()}
+          onClick={() => {
+            if (this.state.customerSearchById) {
+              let itemsPromise = this.props.fetchOrders(
+                `customerId/${this.state.customerSearchById}`
+              );
+            } else {
+              this.props.fetchOrders(this.state.searchValue);
+            }
+          }}
           icon="refresh"
           size="medium"
-          style={{ width: 90, marginRight: 8, float: "right" }}
+          style={{
+            width: 90,
+            marginRight: 8,
+            float: "right",
+            marginBottom: 10
+          }}
         >
           <Icon type="sync" />
         </Button>

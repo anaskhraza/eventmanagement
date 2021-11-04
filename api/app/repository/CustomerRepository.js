@@ -13,6 +13,11 @@ class CustomerRepository extends Repository {
       const include = [
         {
           model: OrderBookings,
+          where: {
+            is_void: {
+              [Sequelize.Op.not]: true
+            }
+          },
           as: "order_customer_id",
           attributes: [
             [

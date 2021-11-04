@@ -21,6 +21,7 @@ export default class OrderController {
     this.createBulkOrders = this.createBulkOrders.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
+    this.fetchCustomerOrders = this.fetchCustomerOrders.bind(this);
   }
 
   async fetchAllOrders(req, res) {
@@ -68,6 +69,35 @@ export default class OrderController {
         res.send(204, "error in fetching data");
       }
     } catch (ex) {
+      res.send(400, "some error occured");
+    }
+  }
+
+  async fetchCustomerOrders(req, res) {
+    try {
+      var customerId = req.params.id;
+      console.log("fetchOneOrder -> ", req.params);
+      const response = await this.orderServices.getOrdersByCustomer(customerId);
+
+      if (response) {
+        const response1 = _.sortBy(response, [
+          function(o) {
+            return o.id;
+          }
+        ]);
+        const responseArray = _.map(response1, obj => {
+          return {
+            ...obj,
+            order_no: "ORD-1000" + obj.id
+          };
+        });
+
+        res.send(200, responseArray);
+      } else {
+        res.send(204, "error in fetching data");
+      }
+    } catch (ex) {
+      console.log("ex ", ex);
       res.send(400, "some error occured");
     }
   }

@@ -8,15 +8,32 @@ class OrderServices {
   }
 
   async getAllOrders(thisMonth) {
-    return await this.orderRepository.getAllOrders(this.database.customers, thisMonth);
+    return await this.orderRepository.getAllOrders(
+      this.database.customers,
+      thisMonth
+    );
+  }
+
+  async getOrdersByCustomer(customerIds) {
+    return await this.orderRepository.getOrdersByCustomer(
+      this.database.customers,
+      customerIds
+    );
   }
 
   async getCompletedOrders(thisMonth, closedCompletedOrd) {
-    return await this.orderRepository.getCompletedOrders(thisMonth, closedCompletedOrd);
+    return await this.orderRepository.getCompletedOrders(
+      this.database.customers,
+      thisMonth,
+      closedCompletedOrd
+    );
   }
 
   async getClosedOrders(thisMonth) {
-    return await this.orderRepository.getClosedOrders(thisMonth);
+    return await this.orderRepository.getClosedOrders(
+      this.database.customers,
+      thisMonth
+    );
   }
 
   async getYearClosedOrders(year) {
@@ -28,7 +45,10 @@ class OrderServices {
   }
 
   async getOverDueOrders(thisMonth) {
-    return await this.orderRepository.getOverDueOrders(thisMonth);
+    return await this.orderRepository.getOverDueOrders(
+      this.database.customers,
+      thisMonth
+    );
   }
 
   async getVoidOrders(thisMonth) {
@@ -40,7 +60,9 @@ class OrderServices {
   }
 
   async getIncomingOrders() {
-    return await this.orderRepository.getIncomingOrders();
+    return await this.orderRepository.getIncomingOrders(
+      this.database.customers
+    );
   }
 
   async getOrders(orderIds) {

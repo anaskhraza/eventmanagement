@@ -19,6 +19,7 @@ export default function* orderListSync(action) {
   let response;
   try {
     if (action.data) {
+      console.log("action data ", action.data);
       response = yield call(getArgOrdersList, action.data);
     } else {
       response = yield call(getOrdersList);
