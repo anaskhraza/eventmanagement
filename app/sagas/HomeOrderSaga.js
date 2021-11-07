@@ -23,7 +23,7 @@ import {
   completedCloseOrderMonth
 } from "../../api/methods/Order";
 import * as orderAction from "../actions/orders";
-
+import _ from "lodash";
 import moment from "moment";
 
 // Our worker Saga that logins the user
@@ -41,9 +41,10 @@ export default function* homeOrderListSync(action) {
   };
   try {
     compCloseMonth = yield call(completedCloseOrderMonth);
-    if (action.data) {
+    const monthYearGroup = action.data.monthYear;
+
+    if (action.data.runClosed) {
       let data = compCloseMonth.body;
-      console.log("data -> ", data);
       data = data.map(obj => {
         return {
           ...obj,
@@ -74,6 +75,21 @@ export default function* homeOrderListSync(action) {
     let voidResponseMonth = yield call(voidOrderMonth);
     const voidDataMonth = voidResponseMonth.body;
     const compCloseData = compCloseMonth.body;
+
+    const group1 = _.groupBy(totalData, "group1");
+    const group2 = _.groupBy(totalData, "group2");
+    const currentMonthData = group1[monthYearGroup] || [];
+    const currentMonthData2 = group2[monthYearGroup] || [];
+    console.log(" mergedArray ", currentMonthData);
+    console.log(" mergedArray ", currentMonthData2);
+    const mergedArray = [...currentMonthData, ...currentMonthData2];
+    const uniqueData = [
+      ...mergedArray
+        .reduce((map, obj) => map.set(obj.id, obj), new Map())
+        .values()
+    ];
+
+    console.log(" mergedArray ", uniqueData);
     finalResp = {
       totalOrderCount: totalData.length || 0,
       totalOverdueCount: overDueData.length || 0,
@@ -85,7 +101,8 @@ export default function* homeOrderListSync(action) {
       monthCompleteCount: completedDataMonth.length || 0,
       voidCount: voidData.length || 0,
       monthVoidCount: voidDataMonth.length || 0,
-      compCloseCount: compCloseData.length || 0
+      compCloseCount: compCloseData.length || 0,
+      calendarData: uniqueData
     };
     yield put(orderAction.fetchHomeOrderFulfilled(finalResp));
   } catch (ex) {

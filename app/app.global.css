@@ -3,6 +3,7 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 @import "~antd/dist/antd.css";
+@import "~react-big-calendar/lib/css/react-big-calendar.css";
 
 .ant-progress-text {
   color: "black" !important;
@@ -10,7 +11,7 @@
 
 body {
   color: white;
-  height: 100vh;
+  height: 200vh;
   background-color: #232c39;
   font-family: Arial, Helvetica, Helvetica Neue, serif;
   overflow-y: hidden;

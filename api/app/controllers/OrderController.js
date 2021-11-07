@@ -36,9 +36,26 @@ export default class OrderController {
           }
         ]);
         const responseArray = _.map(response1, obj => {
+          let eventDate = obj.event_date.split("  ");
+
+          if (!eventDate[0] || !eventDate[1]) {
+            eventDate = obj.event_date.split(" ");
+          }
+          const eventStart = moment(eventDate[0]).format("YYYY-MM-DD");
+          const eventEnd = moment(eventDate[1]).format("YYYY-MM-DD");
+          const monthGroup1 = new Date(eventStart).getMonth();
+          const monthGroup2 = new Date(eventEnd).getMonth();
+          const yearGroup1 = new Date(eventStart).getFullYear();
+          const yearGroup2 = new Date(eventEnd).getFullYear();
+
           return {
             ...obj,
-            order_no: "ORD-1000" + obj.id
+            order_no: "ORD-1000" + obj.id,
+            start: new Date(eventStart),
+            end: new Date(`${eventEnd} 23:59:00`),
+            title: obj.order_title,
+            group1: `${monthGroup1}-${yearGroup1}`,
+            group2: `${monthGroup2}-${yearGroup2}`
           };
         });
 

@@ -26,6 +26,7 @@ import {
   Select,
   Badge
 } from "antd";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import Highlighter from "react-highlight-words";
 
@@ -39,6 +40,7 @@ import {
 } from "../actions/orders";
 import { prepareUpdateEvent } from "../actions/createEvent";
 import { ColumnDropDown, ColumnButton } from "../components/Common";
+const localizer = momentLocalizer(moment);
 
 class HomePage extends Component {
   constructor(props) {
@@ -58,7 +60,9 @@ class HomePage extends Component {
       isVoidModalShow: false,
       disableVoided: true,
       key: "",
-      id: ""
+      id: "",
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getFullYear()
     };
   }
 
@@ -102,7 +106,10 @@ class HomePage extends Component {
 
     this.props.updateOrder(orderId, data, true);
     let itemsPromise3 = this.props.fetchUpcomingOrders();
-    let itemsPromise4 = this.props.fetchHomeOrders();
+    let itemsPromise4 = this.props.fetchHomeOrders({
+      monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
+      runClosed: false
+    });
     this.forceUpdate();
 
     this.setState({
@@ -228,7 +235,10 @@ class HomePage extends Component {
 
   componentDidMount() {
     let itemsPromise = this.props.fetchUpcomingOrders();
-    let itemsPromise1 = this.props.fetchHomeOrders();
+    let itemsPromise1 = this.props.fetchHomeOrders({
+      monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
+      runClosed: false
+    });
   }
 
   showRecieveModal = recordObj => {
@@ -380,7 +390,10 @@ class HomePage extends Component {
     );
   };
   enterIconLoading = () => {
-    let itemsPromise1 = this.props.fetchHomeOrders(true);
+    let itemsPromise1 = this.props.fetchHomeOrders({
+      monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
+      runClosed: true
+    });
     let itemsPromise = this.props.fetchUpcomingOrders();
   };
 
@@ -510,6 +523,12 @@ class HomePage extends Component {
     );
   };
   render() {
+    const Views1 = {
+      MONTH: "month"
+    };
+    const myEventsList = this.props.calendarData;
+
+    let allViews = Object.keys(Views1).map(k => Views1[k]);
     const itemCount = this.props.itemData ? this.props.itemData.length : 0;
     const count = `Order Count: ${itemCount}`;
     const isShowHome = this.state.isShowHome;
@@ -519,7 +538,7 @@ class HomePage extends Component {
       <React.Fragment>
         <div
           style={{
-            width: "auto",
+            width: "80%",
             maxHeight: "100%",
             overflowY: "auto",
             position: "absolute"
@@ -533,6 +552,7 @@ class HomePage extends Component {
               showIcon
             />
           ) : null}
+
           <div
             style={{
               // display: "flex",
@@ -869,6 +889,51 @@ class HomePage extends Component {
               balanceAmount={balanceAmount}
             />
           </div>
+          <div style={{ backgroundColor: "#FFF", width: "80%" }}>
+            <Calendar
+              localizer={localizer}
+              views={allViews}
+              events={myEventsList}
+              popup={true}
+              popupOffset={{ x: 30, y: 20 }}
+              startAccessor="start"
+              onNavigate={event => {
+                this.setState({
+                  currentMonth: new Date(event).getMonth(),
+                  currentYear: new Date(event).getFullYear()
+                });
+                this.props.fetchHomeOrders({
+                  monthYear: `${new Date(event).getMonth()}-${new Date(
+                    event
+                  ).getFullYear()}`,
+                  runClosed: false
+                });
+              }}
+              endAccessor="end"
+              onDoubleClickEvent={event => {
+                console.log("event ", event);
+                alert(event);
+              }}
+              eventPropGetter={event => {
+                console.log("date check ", event);
+                console.log(
+                  "date check ",
+                  new Date(`${event.event_date_start} 23:59:00`) < new Date()
+                );
+                let background = "#1890ff";
+                if (event.is_closed) {
+                  background = "green";
+                } else if (event.complete) {
+                  background = "yellow";
+                } else if (new Date(event.event_date_start) < new Date()) {
+                  background = "red";
+                }
+                return { style: { backgroundColor: background } };
+              }}
+              onShowMore={event => {}}
+              style={{ height: 700, width: "100%", color: "#000" }}
+            />
+          </div>
         </div>
       </React.Fragment>
     );
@@ -911,9 +976,19 @@ function mapStateToProps(state) {
     monthVoidCount: state.home.response
       ? state.home.response.monthVoidCount
       : 0,
-    compCloseCount: state.home.response ? state.home.response.compCloseCount : 0
+    compCloseCount: state.home.response
+      ? state.home.response.compCloseCount
+      : 0,
+    calendarData: state.home.response ? state.home.response.calendarData : []
   };
 }
+
+const ColoredDateCellWrapper = ({ children }) =>
+  React.cloneElement(React.Children.only(children), {
+    style: {
+      backgroundColor: "lightblue"
+    }
+  });
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
