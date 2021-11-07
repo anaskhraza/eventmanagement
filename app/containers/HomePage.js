@@ -62,9 +62,163 @@ class HomePage extends Component {
       key: "",
       id: "",
       currentMonth: new Date().getMonth(),
-      currentYear: new Date().getFullYear()
+      currentYear: new Date().getFullYear(),
+      showModal: false,
+      eventObj: null
     };
   }
+
+  StatsModal = () => {
+    const eventObj = this.state.eventObj;
+    if (eventObj) {
+      return (
+        <React.Fragment>
+          <Modal
+            title="Order Stats"
+            visible={this.state.showModal}
+            onCancel={() => {
+              this.setState({
+                showModal: false
+              });
+            }}
+            footer={[
+              <Button
+                key="back"
+                onClick={() => {
+                  this.setState({
+                    showModal: false
+                  });
+                }}
+              >
+                Ok
+              </Button>
+            ]}
+          >
+            <div
+              style={{
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex"
+                }}
+              >
+                <label style={{ fontSize: 30 }}>{eventObj.order_no}</label>
+              </div>
+              <div
+                style={{
+                  flexDirection: "row",
+                  display: "flex"
+                }}
+              >
+                <div
+                  style={{
+                    width: "33%",
+                    padding: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                >
+                  <label>Total Amount</label>
+                  <label style={{ paddingLeft: 10 }}>
+                    {eventObj.total_amount}
+                  </label>
+                </div>
+                <div
+                  style={{
+                    width: "33%",
+                    padding: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                >
+                  <label>Recieved Amount</label>
+                  <label style={{ paddingLeft: 10 }}>
+                    {eventObj.db_received_amount}
+                  </label>
+                </div>
+                <div
+                  style={{
+                    width: "33%",
+                    padding: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                >
+                  <label>Balance Amount</label>
+                  <label style={{ paddingLeft: 10 }}>
+                    {eventObj.db_balance_amount}
+                  </label>
+                </div>
+              </div>
+              <div style={{ flexDirection: "row", display: "flex" }}>
+                <div
+                  style={{
+                    width: "49%",
+                    padding: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                >
+                  <label>Items expense</label>
+
+                  <label style={{ paddingLeft: 10 }}>
+                    {eventObj.items_expense}
+                  </label>
+                </div>
+                <div
+                  style={{
+                    width: "49%",
+                    padding: 10,
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                >
+                  <label>Other Expense</label>
+
+                  <label style={{ paddingLeft: 10 }}>
+                    {eventObj.other_expense}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        </React.Fragment>
+      );
+    } else {
+      return null;
+    }
+  };
 
   handleNumberChange = e => {
     var inputNumber = e.target.value ? e.target.value : 0;
@@ -889,7 +1043,14 @@ class HomePage extends Component {
               balanceAmount={balanceAmount}
             />
           </div>
-          <div style={{ backgroundColor: "#FFF", width: "80%" }}>
+          <div
+            style={{
+              backgroundColor: "#FFF",
+              width: "90%",
+              marginBottom: 50,
+              marginLeft: 20
+            }}
+          >
             <Calendar
               localizer={localizer}
               views={allViews}
@@ -911,30 +1072,58 @@ class HomePage extends Component {
               }}
               endAccessor="end"
               onDoubleClickEvent={event => {
-                console.log("event ", event);
-                alert(event);
+                this.setState({
+                  eventObj: {
+                    ...event,
+                    items_expense: event.expense_items
+                      ? event.expense_items
+                      : 0,
+                    total_amount: event.total_amount,
+                    db_received_amount: event.received_amount
+                      ? event.received_amount
+                      : 0,
+                    db_balance_amount: event.balance_amount
+                      ? event.balance_amount
+                      : 0,
+                    other_expense:
+                      parseFloat(
+                        event.service_expense ? event.service_expense : 0
+                      ) +
+                      parseFloat(
+                        event.vehicle_charges ? event.vehicle_charges : 0
+                      ),
+                    profit_amount: parseFloat(
+                      parseFloat(event.total_amount) -
+                        parseFloat(
+                          event.expense_items ? event.expense_items : 0
+                        ) -
+                        parseFloat(
+                          event.vehicle_charges ? event.vehicle_charges : 0
+                        ) -
+                        parseFloat(
+                          event.service_expense ? event.service_expense : 0
+                        )
+                    ).toFixed(2)
+                  },
+                  showModal: true
+                });
               }}
               eventPropGetter={event => {
-                console.log("date check ", event);
-                console.log(
-                  "date check ",
-                  new Date(`${event.event_date_start} 23:59:00`) < new Date()
-                );
                 let background = "#1890ff";
                 if (event.is_closed) {
-                  background = "green";
+                  background = "#3cba54";
                 } else if (event.complete) {
-                  background = "yellow";
+                  background = "#f4c20d";
                 } else if (new Date(event.event_date_start) < new Date()) {
-                  background = "red";
+                  background = "#db3236";
                 }
                 return { style: { backgroundColor: background } };
               }}
-              onShowMore={event => {}}
-              style={{ height: 700, width: "100%", color: "#000" }}
+              style={{ height: 700, width: "100%", color: "#000", padding: 10 }}
             />
           </div>
         </div>
+        <this.StatsModal />
       </React.Fragment>
     );
   }
