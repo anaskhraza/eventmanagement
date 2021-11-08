@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
-import routes from "../constants/routes";
+import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import routes from '../constants/routes';
 import {
   DatePicker,
   Button,
@@ -16,26 +16,30 @@ import {
   Switch,
   Menu,
   Dropdown
-} from "antd";
-import moment from "moment";
-import Highlighter from "react-highlight-words";
+} from 'antd';
+import moment from 'moment';
+import Highlighter from 'react-highlight-words';
 
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { SpinnerComponent } from "../utils/common";
-import { fetchCustomers } from "../actions/customers";
-import { ColumnDropDown, ColumnButtonDraft } from "../components/Common";
-import { TouchBarScrubber } from "electron";
-import OrderListPage from "../containers/OrderListPage";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { SpinnerComponent } from '../utils/common';
+import { fetchCustomers } from '../actions/customers';
+import { ColumnDropDown, ColumnButtonDraft } from '../components/Common';
+import { TouchBarScrubber } from 'electron';
+import OrderListPage from '../containers/OrderListPage';
 
 class CustomerLListPage extends Component {
   constructor(props) {
     super();
     this.state = {
-      searchText: "",
-      selectedCustomerId: "",
+      searchText: '',
+      selectedCustomerId: '',
       showCustomerPage: true,
-      showOrderPage: false
+      showOrderPage: false,
+      customerNumber: '',
+      customerName: '',
+      showUpdateCustomerModal: false,
+      recordState: ''
     };
   }
 
@@ -57,7 +61,7 @@ class CustomerLListPage extends Component {
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{ width: 188, marginBottom: 8, display: "block" }}
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
         <Button
           type="primary"
@@ -78,7 +82,7 @@ class CustomerLListPage extends Component {
       </div>
     ),
     filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) => {
       if (record[dataIndex]) {
@@ -97,7 +101,7 @@ class CustomerLListPage extends Component {
     },
     render: text => (
       <Highlighter
-        highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text ? text.toString() : null}
@@ -112,7 +116,7 @@ class CustomerLListPage extends Component {
 
   handleReset = clearFilters => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: '' });
   };
 
   componentDidMount() {
@@ -125,7 +129,7 @@ class CustomerLListPage extends Component {
     //console.log("key -> ", key);
 
     switch (key) {
-      case "edit": {
+      case 'edit': {
         // this.props.prepareUpdateEvent(record);
         break;
       }
@@ -148,37 +152,37 @@ class CustomerLListPage extends Component {
     let OrderCard = null;
     const columns = [
       {
-        title: "Customer Name",
-        dataIndex: "customer_name",
-        width: "20%",
-        ...this.getColumnSearchProps("customer_name")
+        title: 'Customer Name',
+        dataIndex: 'customer_name',
+        width: '20%',
+        ...this.getColumnSearchProps('customer_name')
       },
       {
-        title: "Cell Number",
-        dataIndex: "customer_number",
-        width: "20%",
-        ...this.getColumnSearchProps("customer_number")
+        title: 'Cell Number',
+        dataIndex: 'customer_number',
+        width: '15%',
+        ...this.getColumnSearchProps('customer_number')
       },
       {
-        title: "Alternate Number",
-        dataIndex: "alternate_number",
-        width: "20%",
-        ...this.getColumnSearchProps("alternate_number")
+        title: 'Alternate Number',
+        dataIndex: 'alternate_number',
+        width: '15%',
+        ...this.getColumnSearchProps('alternate_number')
       },
       {
-        title: "Customer Address",
-        dataIndex: "customer_address",
-        width: "15%"
+        title: 'Customer Address',
+        dataIndex: 'customer_address',
+        width: '15%'
       },
       {
-        title: "Order Count",
-        dataIndex: "order_customer_id.countTask",
-        width: "10%"
+        title: 'Order Count',
+        dataIndex: 'order_customer_id.countTask',
+        width: '10%'
       },
       {
-        title: "Show Orders",
-        key: "seestats",
-        width: "15%",
+        title: 'Show Orders',
+        key: 'seestats',
+        width: '13%',
         render: (text, record) => (
           <Button
             type="danger"
@@ -193,6 +197,28 @@ class CustomerLListPage extends Component {
             Show Orders
           </Button>
         )
+      },
+      {
+        title: 'Update Customer',
+        key: 'updatecustomer',
+        width: '12%',
+        render: (text, record) => {
+          return (
+            <Button
+              type="primary"
+              onClick={e => {
+                this.setState({
+                  customerName: record.customer_name,
+                  customerNumber: record.customer_number,
+                  recordState: record,
+                  showUpdateCustomerModal: true
+                });
+              }}
+            >
+              Update Customer
+            </Button>
+          );
+        }
       }
     ];
     const itemCount = this.props.itemData ? this.props.itemData.length : 0;
@@ -202,15 +228,15 @@ class CustomerLListPage extends Component {
 
     //   );
     // }
-    console.log("customer Id ", this.state.selectedCustomerId);
+    console.log('customer Id ', this.state.selectedCustomerId);
     return (
       <Fragment>
         <div
           style={{
-            width: "auto",
-            maxHeight: "100%",
-            overflowY: "auto",
-            position: "absolute"
+            width: 'auto',
+            maxHeight: '100%',
+            overflowY: 'auto',
+            position: 'absolute'
           }}
         >
           <Card
@@ -218,11 +244,11 @@ class CustomerLListPage extends Component {
             extra={count}
             hidden={!this.state.showCustomerPage}
             style={{
-              width: "100%",
-              height: "auto",
+              width: '100%',
+              height: 'auto',
               maxHeight: 1200,
-              textAlign: "center",
-              alignContent: "center"
+              textAlign: 'center',
+              alignContent: 'center'
             }}
           >
             <Table
@@ -236,11 +262,11 @@ class CustomerLListPage extends Component {
             <Fragment>
               <div
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: '100%',
+                  height: 'auto',
                   maxHeight: 1200,
-                  textAlign: "center",
-                  alignContent: "center",
+                  textAlign: 'center',
+                  alignContent: 'center',
                   paddingBottom: 20
                 }}
               >
@@ -255,8 +281,8 @@ class CustomerLListPage extends Component {
                   size="large"
                   style={{
                     width: 200,
-                    justifyContent: "center",
-                    alignItems: "center"
+                    justifyContent: 'center',
+                    alignItems: 'center'
                   }}
                 >
                   Back
@@ -266,9 +292,82 @@ class CustomerLListPage extends Component {
             </Fragment>
           ) : null}
         </div>
+        <this.UpdateModal />
       </Fragment>
     );
   }
+
+  UpdateModal = props => {
+    return (
+      <React.Fragment>
+        <Modal
+          title="Recieve Money"
+          visible={this.state.showUpdateCustomerModal}
+          onCancel={() => {
+            console.log('here');
+            this.setState({
+              showUpdateCustomerModal: false
+            });
+          }}
+          footer={[
+            <Button
+              key="recievepayment"
+              type="danger"
+              onClick={() => {
+                const record = {
+                  ...this.state.recordState,
+                  customer_name: this.state.customerName,
+                  customer_number: this.state.customerNumber
+                };
+              }}
+            >
+              Update Customer
+            </Button>
+          ]}
+        >
+          <this.ModalScreen {...props} />
+        </Modal>
+      </React.Fragment>
+    );
+  };
+
+  ModalScreen = props => {
+    return (
+      <React.Fragment>
+        <Input
+          id="customer_name"
+          addonBefore="Customer Name"
+          onChange={this.handleChange}
+          style={{ width: '65%', marginRight: '3%', marginTop: '3%' }}
+          placeholder="Receive Amount"
+          value={this.state.customerName}
+        />
+        <Input
+          id="customer_number"
+          addonBefore="Phone Number"
+          onChange={this.handleChange}
+          style={{ width: '65%', marginRight: '3%', marginTop: '3%' }}
+          placeholder="Number"
+          value={this.state.customerNumber}
+        />
+      </React.Fragment>
+    );
+  };
+
+  handleChange = e => {
+    if (e.target.id == 'customer_number') {
+      var inputNumber = e.target.value ? e.target.value : 0;
+      console.log('inputNumber ', inputNumber);
+      this.setState({
+        customerNumber: inputNumber
+      });
+    } else if (e.target.id == 'customer_name') {
+      var inputName = e.target.value ? e.target.value : '';
+      this.setState({
+        customerName: inputName
+      });
+    }
+  };
 }
 
 function mapStateToProps(state) {
