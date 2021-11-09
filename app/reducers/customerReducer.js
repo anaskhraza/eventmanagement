@@ -2,7 +2,7 @@ import initialState from "./initialState";
 
 export default function(state = initialState.customers, action) {
   ////console.log('newState state', state);
-  ////console.log('newState state', action.type);
+  console.log("newState state", action);
   switch (action.type) {
     case "RESET_STATE": {
       return {
@@ -31,7 +31,14 @@ export default function(state = initialState.customers, action) {
       };
       break;
     }
-
+    case "CREATE_CUSTOMER": {
+      console.log("action ", "aa");
+      return {
+        ...state,
+        isError: false
+      };
+      break;
+    }
     case "FETCH_CUSTOMER_REJECTED": {
       ////console.log('newState action', action);
 

@@ -22,3 +22,14 @@ export const fetchCustomersRejected = () => {
     type: types.FETCH_CUSTOMER_REJECTED
   };
 };
+
+export function createCustomer(postObj) {
+  console.log("createProducts -> ", postObj);
+  var data = {
+    ...postObj
+  };
+  return {
+    type: types.CREATE_CUSTOMER,
+    data
+  };
+}

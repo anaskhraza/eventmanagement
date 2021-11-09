@@ -26,8 +26,10 @@ import UpcomingOrderSaga from "./UpcomingOrderSaga";
 import PrintSaga from "./PrintSaga";
 import BackupSaga from "./BackupSaga";
 import CustomerSaga from "./CustomerSaga";
+import CreateCustomerSaga from "./CreateCustomerSaga";
 
 export default function* watch() {
+  console.log("hre");
   const watchersRequest = [
     takeEvery(types.FETCH_ITEMS_PENDING, EventItemSaga),
     takeEvery(types.FETCH_ITEMS_QUANTITY_PENDING, EventItemQuantitySaga),
@@ -50,6 +52,7 @@ export default function* watch() {
     takeEvery(types.FETCH_UPCOMING_ORDER_PENDING, UpcomingOrderSaga),
     takeEvery(types.PRINT_ORDER_PENDING, PrintSaga),
     takeEvery(types.FETCH_CUSTOMER_PENDING, CustomerSaga),
+    takeEvery(types.CREATE_CUSTOMER, CreateCustomerSaga),
     takeEvery("BACK_UP_DATABASE", BackupSaga)
   ];
 
