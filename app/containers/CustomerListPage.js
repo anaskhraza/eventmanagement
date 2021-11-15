@@ -15,7 +15,7 @@ import {
   Alert,
   Switch,
   Menu,
-  Dropdown
+  Dropdown,
 } from "antd";
 import moment from "moment";
 import Highlighter from "react-highlight-words";
@@ -39,25 +39,25 @@ class CustomerLListPage extends Component {
       customerNumber: "",
       customerName: "",
       showUpdateCustomerModal: false,
-      recordState: ""
+      recordState: "",
     };
   }
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -81,7 +81,7 @@ class CustomerLListPage extends Component {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) => {
@@ -94,19 +94,19 @@ class CustomerLListPage extends Component {
         return null;
       }
     },
-    onFilterDropdownVisibleChange: visible => {
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text => (
+    render: (text) => (
       <Highlighter
         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text ? text.toString() : null}
       />
-    )
+    ),
   });
 
   handleSearch = (selectedKeys, confirm) => {
@@ -114,7 +114,7 @@ class CustomerLListPage extends Component {
     this.setState({ searchText: selectedKeys[0] });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
   };
@@ -155,29 +155,29 @@ class CustomerLListPage extends Component {
         title: "Customer Name",
         dataIndex: "customer_name",
         width: "20%",
-        ...this.getColumnSearchProps("customer_name")
+        ...this.getColumnSearchProps("customer_name"),
       },
       {
         title: "Cell Number",
         dataIndex: "customer_number",
         width: "15%",
-        ...this.getColumnSearchProps("customer_number")
+        ...this.getColumnSearchProps("customer_number"),
       },
       {
         title: "Alternate Number",
         dataIndex: "alternate_number",
         width: "15%",
-        ...this.getColumnSearchProps("alternate_number")
+        ...this.getColumnSearchProps("alternate_number"),
       },
       {
         title: "Customer Address",
         dataIndex: "customer_address",
-        width: "15%"
+        width: "15%",
       },
       {
         title: "Order Count",
         dataIndex: "order_customer_id.countTask",
-        width: "10%"
+        width: "10%",
       },
       {
         title: "Show Orders",
@@ -186,17 +186,17 @@ class CustomerLListPage extends Component {
         render: (text, record) => (
           <Button
             type="danger"
-            onClick={e =>
+            onClick={(e) =>
               this.setState({
                 selectedCustomerId: record.id,
                 showOrderPage: true,
-                showCustomerPage: false
+                showCustomerPage: false,
               })
             }
           >
             Show Orders
           </Button>
-        )
+        ),
       },
       {
         title: "Update Customer",
@@ -206,20 +206,20 @@ class CustomerLListPage extends Component {
           return (
             <Button
               type="primary"
-              onClick={e => {
+              onClick={(e) => {
                 this.setState({
                   customerName: record.customer_name,
                   customerNumber: record.customer_number,
                   recordState: record,
-                  showUpdateCustomerModal: true
+                  showUpdateCustomerModal: true,
                 });
               }}
             >
               Update Customer
             </Button>
           );
-        }
-      }
+        },
+      },
     ];
     const itemCount = this.props.itemData ? this.props.itemData.length : 0;
     const count = `Customer Count: ${itemCount}`;
@@ -235,7 +235,7 @@ class CustomerLListPage extends Component {
             width: "auto",
             maxHeight: "100%",
             overflowY: "auto",
-            position: "absolute"
+            position: "absolute",
           }}
         >
           <Card
@@ -247,7 +247,7 @@ class CustomerLListPage extends Component {
               height: "auto",
               maxHeight: 1200,
               textAlign: "center",
-              alignContent: "center"
+              alignContent: "center",
             }}
           >
             <Table
@@ -266,7 +266,7 @@ class CustomerLListPage extends Component {
                   maxHeight: 1200,
                   textAlign: "center",
                   alignContent: "center",
-                  paddingBottom: 20
+                  paddingBottom: 20,
                 }}
               >
                 <Button
@@ -274,14 +274,14 @@ class CustomerLListPage extends Component {
                   onClick={() =>
                     this.setState({
                       showOrderPage: false,
-                      showCustomerPage: true
+                      showCustomerPage: true,
                     })
                   }
                   size="large"
                   style={{
                     width: 200,
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
                 >
                   Back
@@ -296,16 +296,16 @@ class CustomerLListPage extends Component {
     );
   }
 
-  UpdateModal = props => {
+  UpdateModal = (props) => {
     return (
       <React.Fragment>
         <Modal
-          title="Recieve Money"
+          title="Update Customer"
           visible={this.state.showUpdateCustomerModal}
           onCancel={() => {
             console.log("here");
             this.setState({
-              showUpdateCustomerModal: false
+              showUpdateCustomerModal: false,
             });
           }}
           footer={[
@@ -316,17 +316,17 @@ class CustomerLListPage extends Component {
                 const record = {
                   ...this.state.recordState,
                   customer_name: this.state.customerName,
-                  customer_number: this.state.customerNumber
+                  customer_number: this.state.customerNumber,
                 };
                 console.log("record ", record);
                 let rec = this.props.createCustomer(record);
                 this.setState({
-                  showUpdateCustomerModal: false
+                  showUpdateCustomerModal: false,
                 });
               }}
             >
               Update Customer
-            </Button>
+            </Button>,
           ]}
         >
           <this.ModalScreen {...props} />
@@ -335,7 +335,7 @@ class CustomerLListPage extends Component {
     );
   };
 
-  ModalScreen = props => {
+  ModalScreen = (props) => {
     return (
       <React.Fragment>
         <Input
@@ -358,17 +358,17 @@ class CustomerLListPage extends Component {
     );
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     if (e.target.id == "customer_number") {
       var inputNumber = e.target.value ? e.target.value : 0;
       console.log("inputNumber ", inputNumber);
       this.setState({
-        customerNumber: inputNumber
+        customerNumber: inputNumber,
       });
     } else if (e.target.id == "customer_name") {
       var inputName = e.target.value ? e.target.value : "";
       this.setState({
-        customerName: inputName
+        customerName: inputName,
       });
     }
   };
@@ -378,7 +378,7 @@ function mapStateToProps(state) {
   //console.log("here Create Event Page", state);
   return {
     itemData: state.customers ? state.customers.data : [],
-    fetching: state.customers ? state.customers.fetching : fasle
+    fetching: state.customers ? state.customers.fetching : fasle,
   };
 }
 
@@ -386,7 +386,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchCustomers: fetchCustomers,
-      createCustomer: createCustomer
+      createCustomer: createCustomer,
     },
     dispatch
   );

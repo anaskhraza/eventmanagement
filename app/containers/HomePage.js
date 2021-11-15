@@ -24,7 +24,7 @@ import {
   Menu,
   Dropdown,
   Select,
-  Badge
+  Badge,
 } from "antd";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
@@ -36,7 +36,7 @@ import { SpinnerComponent } from "../utils/common";
 import {
   fetchHomeOrders,
   fetchUpcomingOrders,
-  updateOrder
+  updateOrder,
 } from "../actions/orders";
 import { prepareUpdateEvent } from "../actions/createEvent";
 import { ColumnDropDown, ColumnButton } from "../components/Common";
@@ -64,7 +64,7 @@ class HomePage extends Component {
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       showModal: false,
-      eventObj: null
+      eventObj: null,
     };
   }
 
@@ -78,7 +78,7 @@ class HomePage extends Component {
             visible={this.state.showModal}
             onCancel={() => {
               this.setState({
-                showModal: false
+                showModal: false,
               });
             }}
             footer={[
@@ -86,18 +86,18 @@ class HomePage extends Component {
                 key="back"
                 onClick={() => {
                   this.setState({
-                    showModal: false
+                    showModal: false,
                   });
                 }}
               >
                 Ok
-              </Button>
+              </Button>,
             ]}
           >
             <div
               style={{
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <div
@@ -105,7 +105,7 @@ class HomePage extends Component {
                   width: "100%",
                   justifyContent: "center",
                   alignItems: "center",
-                  display: "flex"
+                  display: "flex",
                 }}
               >
                 <label style={{ fontSize: 30 }}>{eventObj.order_no}</label>
@@ -113,7 +113,7 @@ class HomePage extends Component {
               <div
                 style={{
                   flexDirection: "row",
-                  display: "flex"
+                  display: "flex",
                 }}
               >
                 <div
@@ -126,7 +126,7 @@ class HomePage extends Component {
                     alignItems: "center",
                     border: "1px solid #e8e8e8",
                     borderRadius: 10,
-                    margin: 10
+                    margin: 10,
                   }}
                 >
                   <label>Total Amount</label>
@@ -144,7 +144,7 @@ class HomePage extends Component {
                     alignItems: "center",
                     border: "1px solid #e8e8e8",
                     borderRadius: 10,
-                    margin: 10
+                    margin: 10,
                   }}
                 >
                   <label>Recieved Amount</label>
@@ -162,7 +162,7 @@ class HomePage extends Component {
                     alignItems: "center",
                     border: "1px solid #e8e8e8",
                     borderRadius: 10,
-                    margin: 10
+                    margin: 10,
                   }}
                 >
                   <label>Balance Amount</label>
@@ -182,7 +182,7 @@ class HomePage extends Component {
                     alignItems: "center",
                     border: "1px solid #e8e8e8",
                     borderRadius: 10,
-                    margin: 10
+                    margin: 10,
                   }}
                 >
                   <label>Items expense</label>
@@ -201,7 +201,7 @@ class HomePage extends Component {
                     alignItems: "center",
                     border: "1px solid #e8e8e8",
                     borderRadius: 10,
-                    margin: 10
+                    margin: 10,
                   }}
                 >
                   <label>Other Expense</label>
@@ -220,7 +220,7 @@ class HomePage extends Component {
     }
   };
 
-  handleNumberChange = e => {
+  handleNumberChange = (e) => {
     var inputNumber = e.target.value ? e.target.value : 0;
     const number = parseInt(inputNumber, 10);
     console.log("inputNumber => ", inputNumber);
@@ -237,7 +237,7 @@ class HomePage extends Component {
         balance_amount:
           this.state.total_amount -
           parseFloat(inputNumber) -
-          this.state.db_received_amount
+          this.state.db_received_amount,
       });
     }
   };
@@ -253,7 +253,7 @@ class HomePage extends Component {
       complete:
         parseInt(this.state.db_received_amount, 10) +
           parseInt(this.state.received_amount, 10) ===
-        parseInt(this.state.total_amount, 10)
+        parseInt(this.state.total_amount, 10),
     };
 
     const orderId = this.state.id;
@@ -262,13 +262,13 @@ class HomePage extends Component {
     let itemsPromise3 = this.props.fetchUpcomingOrders();
     let itemsPromise4 = this.props.fetchHomeOrders({
       monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
-      runClosed: false
+      runClosed: false,
     });
     this.forceUpdate();
 
     this.setState({
       isShowHome: false,
-      received_amount: 0
+      received_amount: 0,
     });
   };
 
@@ -278,7 +278,7 @@ class HomePage extends Component {
       received_amount: 0,
       balance_amount: 0,
       is_due_amount: 0,
-      complete: true
+      complete: true,
     };
 
     const orderId = this.state.id;
@@ -287,7 +287,7 @@ class HomePage extends Component {
 
     this.setState({
       isVoidModalShow: false,
-      received_amount: 0
+      received_amount: 0,
     });
   };
 
@@ -300,7 +300,7 @@ class HomePage extends Component {
         parseInt(record.discount, 10) + parseInt(record.balance_amount, 10),
       balance_amount: 0,
       is_due_amount: 0,
-      complete: true
+      complete: true,
     };
 
     const orderId = record.id;
@@ -308,29 +308,29 @@ class HomePage extends Component {
     this.props.updateOrder(orderId, data, true);
   };
 
-  handleCancel = e => {
+  handleCancel = (e) => {
     ////console.log(e);
     this.setState({
       isShowHome: false,
-      isVoidModalShow: false
+      isVoidModalShow: false,
     });
   };
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -354,27 +354,24 @@ class HomePage extends Component {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text => (
+    render: (text) => (
       <Highlighter
         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text ? text.toString() : ""}
       />
-    )
+    ),
   });
 
   handleSearch = (selectedKeys, confirm) => {
@@ -382,7 +379,7 @@ class HomePage extends Component {
     this.setState({ searchText: selectedKeys[0] });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
   };
@@ -391,11 +388,11 @@ class HomePage extends Component {
     let itemsPromise = this.props.fetchUpcomingOrders();
     let itemsPromise1 = this.props.fetchHomeOrders({
       monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
-      runClosed: false
+      runClosed: false,
     });
   }
 
-  showRecieveModal = recordObj => {
+  showRecieveModal = (recordObj) => {
     this.setState({
       key: recordObj.key,
       id: recordObj.id,
@@ -404,11 +401,11 @@ class HomePage extends Component {
       db_received_amount: recordObj.received_amount,
       db_balance_amount: recordObj.balance_amount,
       balance_amount: recordObj.balance_amount,
-      isShowHome: true
+      isShowHome: true,
     });
   };
 
-  showVoidModal = recordObj => {
+  showVoidModal = (recordObj) => {
     this.setState({
       key: recordObj.key,
       id: recordObj.id,
@@ -417,7 +414,7 @@ class HomePage extends Component {
       db_received_amount: recordObj.received_amount,
       db_balance_amount: recordObj.balance_amount,
       balance_amount: recordObj.balance_amount,
-      isVoidModalShow: true
+      isVoidModalShow: true,
     });
   };
 
@@ -444,7 +441,7 @@ class HomePage extends Component {
     }
   };
 
-  ModalScreen = props => {
+  ModalScreen = (props) => {
     return (
       <React.Fragment>
         <div className="orderInfo">
@@ -475,7 +472,7 @@ class HomePage extends Component {
 
   enableVoid = () => {
     this.setState({
-      disableVoided: !this.state.disableVoided
+      disableVoided: !this.state.disableVoided,
     });
   };
 
@@ -497,7 +494,7 @@ class HomePage extends Component {
             </Button>,
             <Button key="back" onClick={this.handleCancel}>
               Cancel
-            </Button>
+            </Button>,
           ]}
         >
           <p>Swipe the switch and press OK to void the order</p>
@@ -507,7 +504,7 @@ class HomePage extends Component {
     );
   };
 
-  RecieveModal = props => {
+  RecieveModal = (props) => {
     console.log("this.seyaye => ", this.state.isShowHome);
     return (
       <React.Fragment>
@@ -535,7 +532,7 @@ class HomePage extends Component {
               onClick={this.handleCancel}
             >
               Cancel
-            </Button>
+            </Button>,
           ]}
         >
           <this.ModalScreen {...props} />
@@ -546,12 +543,12 @@ class HomePage extends Component {
   enterIconLoading = () => {
     let itemsPromise1 = this.props.fetchHomeOrders({
       monthYear: `${this.state.currentMonth}-${this.state.currentYear}`,
-      runClosed: true
+      runClosed: true,
     });
     let itemsPromise = this.props.fetchUpcomingOrders();
   };
 
-  HomeCards = props => {
+  HomeCards = (props) => {
     let reactNode = null;
     const data = this.props.itemData || [];
     const isError = this.props.isError || [];
@@ -569,7 +566,7 @@ class HomePage extends Component {
       );
     }
     if (data.length < 1) return null;
-    reactNode = data.map(obj => {
+    reactNode = data.map((obj) => {
       return (
         <React.Fragment>
           <Card
@@ -586,14 +583,14 @@ class HomePage extends Component {
                   flex: 1,
                   flexDirection: "column",
                   textAlign: "left",
-                  marginTop: 10
+                  marginTop: 10,
                 }}
               >
                 <label
                   style={{
                     borderBottom: "1px solid #e8e8e8",
                     marginTop: 10,
-                    paddingLeft: 5
+                    paddingLeft: 5,
                   }}
                 >
                   {obj.order_title}
@@ -602,7 +599,7 @@ class HomePage extends Component {
                   style={{
                     borderBottom: "1px solid #e8e8e8",
                     marginTop: 10,
-                    paddingLeft: 5
+                    paddingLeft: 5,
                   }}
                 >
                   Event Date: {obj.event_date}
@@ -611,7 +608,7 @@ class HomePage extends Component {
                   style={{
                     borderBottom: "1px solid #e8e8e8",
                     marginTop: 10,
-                    paddingLeft: 5
+                    paddingLeft: 5,
                   }}
                 >
                   Total Amount: {obj.total_amount}
@@ -620,7 +617,7 @@ class HomePage extends Component {
                   style={{
                     borderBottom: "1px solid #e8e8e8",
                     marginTop: 10,
-                    paddingLeft: 5
+                    paddingLeft: 5,
                   }}
                 >
                   Balance Amount: <Tag color="#f50">{obj.balance_amount}</Tag>
@@ -630,21 +627,21 @@ class HomePage extends Component {
             actions={[
               <Button
                 id={"receievepayment"}
-                onClick={e => this.handleClick(obj, "receievepayment")}
+                onClick={(e) => this.handleClick(obj, "receievepayment")}
                 disabled={parseInt(obj.balance_amount, 10) === 0}
                 style={{
                   border: "none",
-                  background: "transparent"
+                  background: "transparent",
                 }}
               >
                 <Icon type="dollar" key="dollar" />
               </Button>,
               <Button
                 id={"edit"}
-                onClick={e => this.handleClick(obj, "edit")}
+                onClick={(e) => this.handleClick(obj, "edit")}
                 style={{
                   border: "none",
-                  background: "transparent"
+                  background: "transparent",
                 }}
               >
                 <Link
@@ -653,7 +650,7 @@ class HomePage extends Component {
                 >
                   <Icon type="edit" key="edit" />
                 </Link>
-              </Button>
+              </Button>,
             ]}
           ></Card>
           {RecieveModal1}
@@ -669,7 +666,7 @@ class HomePage extends Component {
           flexWrap: "wrap",
           paddingTop: 20,
           paddingLeft: 20,
-          paddingBottom: 50
+          paddingBottom: 50,
         }}
       >
         {reactNode}
@@ -678,11 +675,11 @@ class HomePage extends Component {
   };
   render() {
     const Views1 = {
-      MONTH: "month"
+      MONTH: "month",
     };
     const myEventsList = this.props.calendarData;
 
-    let allViews = Object.keys(Views1).map(k => Views1[k]);
+    let allViews = Object.keys(Views1).map((k) => Views1[k]);
     const itemCount = this.props.itemData ? this.props.itemData.length : 0;
     const count = `Order Count: ${itemCount}`;
     const isShowHome = this.state.isShowHome;
@@ -695,7 +692,7 @@ class HomePage extends Component {
             width: "80%",
             maxHeight: "100%",
             overflowY: "auto",
-            position: "absolute"
+            position: "absolute",
           }}
         >
           {isErrorHome ? (
@@ -712,7 +709,7 @@ class HomePage extends Component {
               // display: "flex",
               // justifyContent: "flex-start",
               marginTop: 10,
-              marginLeft: 20
+              marginLeft: 20,
             }}
           >
             <label style={{ paddingTop: 20 }}>Total Order Stats</label>
@@ -723,7 +720,7 @@ class HomePage extends Component {
               // position: "relative",
               // justifyContent: "flex-start",
               marginLeft: 20,
-              marginTop: 10
+              marginTop: 10,
             }}
           >
             <Row gutter={18}>
@@ -734,7 +731,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -759,7 +756,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -784,7 +781,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -809,7 +806,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -834,7 +831,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -859,7 +856,7 @@ class HomePage extends Component {
               // display: "flex",
               // justifyContent: "flex-start",
               marginTop: 10,
-              marginLeft: 20
+              marginLeft: 20,
             }}
           >
             <label style={{ paddingTop: 20 }}>Current Month Order Stats</label>
@@ -869,7 +866,7 @@ class HomePage extends Component {
               // display: "flex",
               // justifyContent: "flex-start",
               marginTop: 10,
-              marginLeft: 20
+              marginLeft: 20,
             }}
           >
             <Row gutter={18}>
@@ -879,7 +876,7 @@ class HomePage extends Component {
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -904,7 +901,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -929,7 +926,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -954,7 +951,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -979,7 +976,7 @@ class HomePage extends Component {
                       width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Icon
@@ -1003,12 +1000,12 @@ class HomePage extends Component {
             style={{
               justifyContent: "flex-start",
               marginLeft: 20,
-              marginTop: 10
+              marginTop: 10,
             }}
           >
             <Card
               style={{
-                width: "62%"
+                width: "62%",
               }}
             >
               <Button
@@ -1032,7 +1029,7 @@ class HomePage extends Component {
               // display: "flex",
               // justifyContent: "flex-start",
               marginTop: 10,
-              marginLeft: 20
+              marginLeft: 20,
             }}
           >
             <label style={{ paddingTop: 20 }}>Upcoming Orders</label>
@@ -1047,8 +1044,8 @@ class HomePage extends Component {
             style={{
               backgroundColor: "#FFF",
               width: "90%",
-              marginBottom: 50,
-              marginLeft: 20
+              marginLeft: 20,
+              marginBottom: 20,
             }}
           >
             <Calendar
@@ -1058,20 +1055,20 @@ class HomePage extends Component {
               popup={true}
               popupOffset={{ x: 30, y: 20 }}
               startAccessor="start"
-              onNavigate={event => {
+              onNavigate={(event) => {
                 this.setState({
                   currentMonth: new Date(event).getMonth(),
-                  currentYear: new Date(event).getFullYear()
+                  currentYear: new Date(event).getFullYear(),
                 });
                 this.props.fetchHomeOrders({
                   monthYear: `${new Date(event).getMonth()}-${new Date(
                     event
                   ).getFullYear()}`,
-                  runClosed: false
+                  runClosed: false,
                 });
               }}
               endAccessor="end"
-              onDoubleClickEvent={event => {
+              onDoubleClickEvent={(event) => {
                 this.setState({
                   eventObj: {
                     ...event,
@@ -1103,12 +1100,12 @@ class HomePage extends Component {
                         parseFloat(
                           event.service_expense ? event.service_expense : 0
                         )
-                    ).toFixed(2)
+                    ).toFixed(2),
                   },
-                  showModal: true
+                  showModal: true,
                 });
               }}
-              eventPropGetter={event => {
+              eventPropGetter={(event) => {
                 let background = "#1890ff";
                 if (event.is_closed) {
                   background = "#3cba54";
@@ -1121,6 +1118,56 @@ class HomePage extends Component {
               }}
               style={{ height: 700, width: "100%", color: "#000", padding: 10 }}
             />
+          </div>
+          <div
+            style={{
+              width: "70%",
+              marginBottom: 50,
+              marginLeft: 20,
+              flexDirection: "row",
+              display: "flex",
+            }}
+          >
+            <div
+              style={{
+                width: "30%",
+                backgroundColor: "#1890ff",
+                margin: 20,
+                padding: 10,
+              }}
+            >
+              Upcoming
+            </div>
+            <div
+              style={{
+                width: "30%",
+                backgroundColor: "#3cba54",
+                margin: 20,
+                padding: 10,
+              }}
+            >
+              Closed
+            </div>
+            <div
+              style={{
+                width: "30%",
+                backgroundColor: "#f4c20d",
+                margin: 20,
+                padding: 10,
+              }}
+            >
+              Complete
+            </div>
+            <div
+              style={{
+                width: "30%",
+                backgroundColor: "#db3236",
+                margin: 20,
+                padding: 10,
+              }}
+            >
+              OverDue
+            </div>
           </div>
         </div>
         <this.StatsModal />
@@ -1168,15 +1215,15 @@ function mapStateToProps(state) {
     compCloseCount: state.home.response
       ? state.home.response.compCloseCount
       : 0,
-    calendarData: state.home.response ? state.home.response.calendarData : []
+    calendarData: state.home.response ? state.home.response.calendarData : [],
   };
 }
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
     style: {
-      backgroundColor: "lightblue"
-    }
+      backgroundColor: "lightblue",
+    },
   });
 
 function mapDispatchToProps(dispatch) {
@@ -1185,7 +1232,7 @@ function mapDispatchToProps(dispatch) {
       fetchHomeOrders: fetchHomeOrders,
       updateOrder: updateOrder,
       fetchUpcomingOrders: fetchUpcomingOrders,
-      prepareUpdateEvent: prepareUpdateEvent
+      prepareUpdateEvent: prepareUpdateEvent,
     },
     dispatch
   );
