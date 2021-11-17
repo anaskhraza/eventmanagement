@@ -6,6 +6,20 @@ class BookingProductRepository extends Repository {
     super(bookingProducts);
   }
 
+  async getAllOrdererdProducts(categories, items) {
+    try {
+      const nestedInclude = [{ model: categories, as: "Category" }];
+      const include = [
+        { model: items, as: "Product_Booking_Key", include: nestedInclude }
+      ];
+
+      return await this.findAllRecords({}, null, include);
+    } catch (error) {
+      //console.log("catch ex", error);
+      throw error;
+    }
+  }
+
   async getOrdererdDateProducts() {
     try {
       return await this.findAllRecords();

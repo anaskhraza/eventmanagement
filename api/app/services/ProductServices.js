@@ -1,6 +1,6 @@
-import ProductRepository from '../repository/ProductRepository';
-import BookingProductRepository from '../repository/BookingProductRepository';
-import DraftProductRepository from '../repository/DraftProductRepository';
+import ProductRepository from "../repository/ProductRepository";
+import BookingProductRepository from "../repository/BookingProductRepository";
+import DraftProductRepository from "../repository/DraftProductRepository";
 // import { rolesDTO } from "../DTO/rbacDTO";
 
 class ProductServices {
@@ -50,6 +50,13 @@ class ProductServices {
 
   async deleteOrderedProducts(orderId) {
     return await this.bookingProductRepository.deleteOrderedProducts(orderId);
+  }
+
+  async getAllOrderedProducts() {
+    return await this.bookingProductRepository.getAllOrdererdProducts(
+      this.database.categories,
+      this.database.items
+    );
   }
 
   async getOrderedProductsByOrderId(orderId) {

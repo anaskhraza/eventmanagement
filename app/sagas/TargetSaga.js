@@ -125,6 +125,7 @@ const parsedYearlyStats = (data, targetData) => {
   respArray.push([
     "Total Amount",
     "Service Charges",
+    "Item Expense",
     "OverDue Amount",
     "Target"
   ]);
@@ -148,6 +149,7 @@ const parsedYearlyStats = (data, targetData) => {
 const getMonthlyParsedStats = (data, month, target) => {
   let totalAmount = 0;
   let totalService = 0;
+  let itemExpense = 0;
   let overDueAmount = 0;
   let processedData = [];
   console.log("data ", data);
@@ -156,11 +158,12 @@ const getMonthlyParsedStats = (data, month, target) => {
       let dueAmount = obj.is_due_amount || 0;
       totalAmount = parseFloat(obj.received_amount) + totalAmount;
       totalService = parseFloat(obj.service_expense) + totalService;
+      itemExpense = parseFloat(obj.expense_items) + itemExpense;
       overDueAmount = parseFloat(dueAmount) + overDueAmount;
     });
   }
 
-  return [month, totalAmount, totalService, overDueAmount, target];
+  return [month, totalAmount, totalService, itemExpense, overDueAmount, target];
 };
 
 const parsedSimplifiedData = (data, isTarget) => {
@@ -213,10 +216,10 @@ const getOverDueProcessedData = (resp, stats) => {
 
   let currentMonth = _.groupBy(processedObj.processedData, "currentMonth");
   let previousMonth = _.groupBy(processedObj.processedData, "previousMonth");
-  console.log("previousMonth => ", previousMonth);
+
   const currentMonthObj = parsedOverDueStats(currentMonth[true]);
   const previousMonthObj = parsedOverDueStats(previousMonth[true]);
-  console.log("currentMonthObj => ", currentMonthObj);
+
   return {
     overDueAmount: processedObj.overDueAmount,
     totalService: processedObj.totalService,
@@ -236,8 +239,7 @@ const parsedOverDueStats = data => {
   let processedData = [];
   let previousYear = new Date().getFullYear();
   let previousMonth = new Date().getMonth() - 1;
-  console.log("previousMonth ", previousMonth);
-  console.log("previousYear ", previousYear);
+
   if (previousMonth < 0) {
     previousMonth = 11;
     previousYear = previousYear - 1;
@@ -273,10 +275,10 @@ const getProcessedData = (resp, stats) => {
 
   let currentMonth = _.groupBy(processedObj.processedData, "currentMonth");
   let previousMonth = _.groupBy(processedObj.processedData, "previousMonth");
-  console.log("currentMonth ", currentMonth);
+
   const currentMonthObj = parsedStats(currentMonth[true]);
   const previousMonthObj = parsedStats(previousMonth[true]);
-  console.log("currentMonthObj ", currentMonthObj);
+
   return {
     totalAmount: processedObj.totalAmount,
     totalService: processedObj.totalService,
@@ -303,8 +305,13 @@ const parsedStats = data => {
   if (data && data.length > 0) {
     processedData = data.map(obj => {
       if (obj.received_amount) {
+        var expenseItems =
+          obj.expense_items && obj.expense_items != "NAN"
+            ? parseFloat(obj.expense_items)
+            : 0;
         totalAmount = parseFloat(obj.received_amount) + totalAmount;
-        totalService = parseFloat(obj.service_expense) + totalService;
+        totalService =
+          parseFloat(obj.service_expense) + totalService + expenseItems;
       }
 
       return {

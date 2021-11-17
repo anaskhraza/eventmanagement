@@ -11,6 +11,7 @@ export default class ProductController {
     this.createProduct = this.createProduct.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this);
     this.createBulkProducts = this.createBulkProducts.bind(this);
+    this.fetchAllOrderedProducts = this.fetchAllOrderedProducts.bind(this);
 
     ////////////// Ordered Products Section ///////////////////
     this.fetchProductsForOrders = this.fetchProductsForOrders.bind(this);
@@ -76,6 +77,24 @@ export default class ProductController {
       }
     } catch (ex) {
       //console.log("error -> ", ex);
+      res.send(400, "some error occured");
+    }
+  }
+
+  async fetchAllOrderedProducts(req, res) {
+    try {
+      const dateObj = req.body;
+
+      //console.log("dateObj -> ", dateObj);
+      const response = await this.productServices.getAllOrderedProducts();
+      if (response && response.length > 0) {
+        const finalResp = this._dataObjectForProducts(response, dateObj);
+        res.send(200, finalResp);
+      } else {
+        res.send(204, "error in fetching data");
+      }
+    } catch (ex) {
+      console.log("error -> ", ex);
       res.send(400, "some error occured");
     }
   }

@@ -27,6 +27,7 @@ import PrintSaga from "./PrintSaga";
 import BackupSaga from "./BackupSaga";
 import CustomerSaga from "./CustomerSaga";
 import CreateCustomerSaga from "./CreateCustomerSaga";
+import ItemExpenseSaga from "./ItemExpenseSaga";
 
 export default function* watch() {
   console.log("hre");
@@ -53,6 +54,7 @@ export default function* watch() {
     takeEvery(types.PRINT_ORDER_PENDING, PrintSaga),
     takeEvery(types.FETCH_CUSTOMER_PENDING, CustomerSaga),
     takeEvery(types.CREATE_CUSTOMER, CreateCustomerSaga),
+    takeEvery(types.ITEM_EXPENSE_PENDING, ItemExpenseSaga),
     takeEvery("BACK_UP_DATABASE", BackupSaga)
   ];
 

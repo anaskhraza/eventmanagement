@@ -22,6 +22,10 @@ export async function deleteEventItems(orderId) {
   );
 }
 
+export async function fetchOrderedItems() {
+  return await Api(`products/orders`, null, "get", null);
+}
+
 export async function fetchItemByOrderId(orderId) {
   return await Api(`products/orders/${orderId}`, null, "get", null);
 }

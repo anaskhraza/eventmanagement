@@ -14,6 +14,7 @@ import print from "./printReducer";
 import home from "./homeOrders";
 import backup from "./backupReducer";
 import customers from "./customerReducer";
+import itemExpense from "./itemExpenseReducer";
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -30,6 +31,7 @@ export default function createRootReducer(history: History) {
     print,
     backup,
     home,
-    customers
+    customers,
+    itemExpense
   });
 }

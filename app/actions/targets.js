@@ -56,6 +56,18 @@ export const backupDatabaseCompleted = () => {
   };
 };
 
+export const updateItemExpense = () => {
+  return {
+    type: "ITEM_EXPENSE_PENDING"
+  };
+};
+
+export const updateItemExpenseCompleted = () => {
+  return {
+    type: "ITEM_EXPENSE_DONE"
+  };
+};
+
 export function deleteTarget(targetId, auth, year) {
   return {
     type: types.DELETE_TARGETS_PENDING,

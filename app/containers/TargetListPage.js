@@ -34,7 +34,8 @@ import {
   createTarget,
   deleteTarget,
   resetSateEvent,
-  backupDatabase
+  backupDatabase,
+  updateItemExpense
 } from "../actions/targets";
 import { ColumnDropDown, ColumnButton } from "../components/Common";
 import { AlertCredentialsError } from "../utils/common";
@@ -951,6 +952,27 @@ class TargetListPage extends Component {
               <OrderListPage showStatsButton={true} />
             </Card>
           </div>
+          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+            {this.props.auth ? (
+              <Button
+                key="backup"
+                onClick={e => {
+                  this.props.updateItemExpense();
+                }}
+                type="primary"
+                style={{
+                  width: 300,
+                  height: 50,
+                  top: 10,
+                  display: "flex",
+                  justifyContent: "center",
+                  marginLeft: 20
+                }}
+              >
+                Update Expense Items
+              </Button>
+            ) : null}
+          </div>
           <this.ItemModal />
           <this.SignInModal />
         </div>
@@ -979,11 +1001,13 @@ const ChartsPerMonthFinance = props => {
   const year = props.year;
   let totalAmountData = [];
   let serviceCharges = [];
+  let itemExpense = [];
   let option = null;
   let overdueAmt = [];
   let target = [];
   let totalAmountMonth;
   let serviceChargesMonth;
+  let itemExpenseMonth;
   let overdueMonth;
   let targetMonth;
   let yearlyStats = props.yearlyStats;
@@ -996,13 +1020,15 @@ const ChartsPerMonthFinance = props => {
       months.push(arr[0]);
       totalAmountData.push(arr[1]);
       serviceCharges.push(arr[2]);
-      overdueAmt.push(arr[3]);
-      target.push(arr[4]);
+      itemExpense.push(arr[3]);
+      overdueAmt.push(arr[4]);
+      target.push(arr[5]);
     });
     const indexMonth = months.indexOf(chartMonth);
     totalAmountMonth = totalAmountData[indexMonth];
     serviceChargesMonth = serviceCharges[indexMonth];
     overdueMonth = overdueAmt[indexMonth];
+    itemExpenseMonth = itemExpense[indexMonth];
     targetMonth = target[indexMonth];
     option = {
       tooltip: {
@@ -1029,7 +1055,8 @@ const ChartsPerMonthFinance = props => {
           data: [
             { value: totalAmountMonth, name: "Recieved Amount" },
             { value: serviceChargesMonth, name: "Service Charges" },
-            { value: overdueMonth, name: "OverDue" }
+            { value: overdueMonth, name: "OverDue" },
+            { value: itemExpenseMonth, name: "Item Expense" }
           ]
         }
       ]
@@ -1078,7 +1105,7 @@ const ChartsPerMonthFinance = props => {
               }}
             >
               <Row>
-                <Col span={6}>
+                <Col span={8}>
                   <div
                     style={{
                       flexDirection: "column",
@@ -1110,7 +1137,7 @@ const ChartsPerMonthFinance = props => {
                       style={{
                         width: "100%",
                         padding: 10,
-                        backgroundColor: "#f7bf47",
+                        backgroundColor: "#81c463",
                         flexDirection: "column",
                         display: "flex",
                         justifyContent: "center",
@@ -1125,11 +1152,12 @@ const ChartsPerMonthFinance = props => {
                         {serviceChargesMonth}
                       </label>
                     </div>
+
                     <div
                       style={{
                         width: "100%",
                         padding: 10,
-                        backgroundColor: "#81c463",
+                        backgroundColor: "#f7bf47",
                         flexDirection: "column",
                         display: "flex",
                         justifyContent: "center",
@@ -1144,7 +1172,7 @@ const ChartsPerMonthFinance = props => {
                     </div>
                   </div>
                 </Col>
-                <Col span={6}>
+                <Col span={8}>
                   <div
                     style={{
                       flexDirection: "column",
@@ -1165,9 +1193,9 @@ const ChartsPerMonthFinance = props => {
                         margin: 10
                       }}
                     >
-                      <label style={{ color: "#FFFFFF" }}>Total Amount</label>
+                      <label style={{ color: "#FFFFFF" }}>Item Expense</label>
                       <label style={{ color: "#FFFFFF" }}>
-                        {totalAmountMonth + overdueMonth}
+                        {itemExpenseMonth}
                       </label>
                     </div>
                     <div
@@ -1188,7 +1216,9 @@ const ChartsPerMonthFinance = props => {
                         Current Wallet Profit
                       </label>
                       <label style={{ color: "#FFFFFF" }}>
-                        {totalAmountMonth - serviceChargesMonth}
+                        {totalAmountMonth -
+                          serviceChargesMonth -
+                          itemExpenseMonth}
                       </label>
                     </div>
 
@@ -1206,11 +1236,44 @@ const ChartsPerMonthFinance = props => {
                         margin: 10
                       }}
                     >
+                      <label style={{ color: "#FFFFFF" }}>Total Amount</label>
+                      <label style={{ color: "#FFFFFF" }}>
+                        {totalAmountMonth + overdueMonth}
+                      </label>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={16}>
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      display: "flex"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        backgroundColor: "#4359b9",
+                        padding: 10,
+                        flexDirection: "column",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid #e8e8e8",
+                        borderRadius: 10,
+                        margin: 10
+                      }}
+                    >
                       <label style={{ color: "#FFFFFF" }}>
                         Estimated Profit
                       </label>
                       <label style={{ color: "#FFFFFF" }}>
-                        {totalAmountMonth + overdueMonth - serviceChargesMonth}
+                        {totalAmountMonth +
+                          overdueMonth -
+                          serviceChargesMonth -
+                          itemExpenseMonth}
                       </label>
                     </div>
                   </div>
@@ -1230,6 +1293,7 @@ const ChartsPerFinance = props => {
   let totAmount = [];
   let serviceCharges = [];
   let overdueAmt = [];
+  let itemExpense = [];
   let target = [];
   let profit = [];
   const yearlyStats = props.yearlyStats;
@@ -1240,10 +1304,11 @@ const ChartsPerFinance = props => {
       months.push(arr[0]);
       totalAmountData.push(arr[1]);
       serviceCharges.push(arr[2]);
-      overdueAmt.push(arr[3]);
-      target.push(arr[4]);
-      totAmount.push(arr[1] + arr[3]);
-      profit.push(arr[1] + arr[3] - arr[2]);
+      itemExpense.push(arr[3]);
+      overdueAmt.push(arr[4]);
+      target.push(arr[5]);
+      totAmount.push(arr[1] + arr[4]);
+      profit.push(arr[1] + arr[4] - arr[2] - arr[3]);
     });
 
     let series = [
@@ -1263,9 +1328,19 @@ const ChartsPerFinance = props => {
         data: overdueAmt
       },
       {
+        name: "Item Expense",
+        type: "bar",
+        data: itemExpense
+      },
+      {
         name: "Total Amount",
         type: "line",
         data: totAmount
+      },
+      {
+        name: "Profit",
+        type: "line",
+        data: profit
       }
     ];
 
@@ -1398,6 +1473,7 @@ function mapDispatchToProps(dispatch) {
       createTarget: createTarget,
       deleteTarget: deleteTarget,
       backupDatabase: backupDatabase,
+      updateItemExpense: updateItemExpense,
       resetSateEvent: resetSateEvent
     },
     dispatch

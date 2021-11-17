@@ -96,6 +96,11 @@ export default {
     fetching: false,
     error: null
   },
+  itemExpense: {
+    data: {},
+    fetching: false,
+    error: null
+  },
   customer: null,
   orderDetail: null
 };
