@@ -123,7 +123,14 @@ const dataObjectForItems = (
         diffDays = 1;
       }
       const eventDate = `${sDateFormatted} ${eDateFormatted}`;
-
+      var customRate = obj.rate;
+      if (
+        isOrderedItem[0].order_item_price &&
+        isOrderedItem[0].order_item_price != "NAN" &&
+        isOrderedItem[0].order_item_price != 0
+      ) {
+        customRate = isOrderedItem[0].order_item_price;
+      }
       let orderedObj = {
         ...obj,
         databaseId: isOrderedItem[0].id,
@@ -133,7 +140,8 @@ const dataObjectForItems = (
         quantity_ordered: isOrderedItem[0].order_quantity,
         event_booking_start: sDateFormatted,
         event_booking_end: eDateFormatted,
-        price: isOrderedItem[0].order_quantity * diffDays * obj.rate,
+        rate: customRate,
+        price: isOrderedItem[0].order_quantity * diffDays * customRate,
         no_of_days: diffDays,
         eventDate: eventDate
       };

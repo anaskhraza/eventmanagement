@@ -65,7 +65,7 @@ class EventItemPage extends Component {
 
   handleReset = clearFilters => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.setState({ searchText: "", filterInfo: "" });
   };
 
   getColumnSearchProps = dataIndex => ({
