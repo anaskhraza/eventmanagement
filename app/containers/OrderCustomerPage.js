@@ -58,6 +58,8 @@ class OrderCustomerPage extends Component {
       receivedAmount: 0,
       totalAmount: 0,
       grossAmount: 0,
+      itemExpense: 0,
+      itemCalculationExpense: 0,
       isUpdateEvent: null,
       draftTitle: null,
       serviceExpense: 0,
@@ -99,6 +101,8 @@ class OrderCustomerPage extends Component {
 
       return {
         grossAmount: props.orderCost,
+        itemExpense: props.itemExpense,
+        itemCalculationExpense: props.itemExpense,
         totalAmount: parseFloat(props.orderCost) - discount + vehicleCharges,
         balanceAmount:
           parseFloat(props.orderCost) -
@@ -134,6 +138,8 @@ class OrderCustomerPage extends Component {
         discount: props.updateOrderDetail.discount,
         receivedAmount: props.updateOrderDetail.received_amount,
         serviceExpense: props.updateOrderDetail.service_expense,
+        itemExpense: props.updateOrderDetail.expense_items,
+        itemCalculationExpense: updateOrderDetail.expense_items,
         perHeadAmount: props.updateOrderDetail.per_head_amount,
         noOfPerson: props.updateOrderDetail.no_of_person,
         orderTitle: props.updateOrderDetail.order_title,
@@ -323,6 +329,7 @@ class OrderCustomerPage extends Component {
       this.setState({
         tabSelect: key,
         grossAmount: this.state.itemCalculationAmount,
+        itemExpense: this.state.itemCalculationExpense,
         totalAmount:
           parseFloat(this.state.itemCalculationAmount) -
           discount +
@@ -345,6 +352,7 @@ class OrderCustomerPage extends Component {
           balanceAmount:
             parseFloat(this.state.perHeadAmount) *
             parseInt(this.state.noOfPerson),
+          itemExpense: 0,
           tabSelect: key
         });
       } else {
@@ -352,6 +360,7 @@ class OrderCustomerPage extends Component {
           grossAmount: 0,
           totalAmount: 0,
           balanceAmount: 0,
+          itemExpense: 0,
           tabSelect: key
         });
       }
@@ -747,6 +756,18 @@ class OrderCustomerPage extends Component {
                       }}
                       placeholder="Service Expenses"
                     />
+                    <Input
+                      id="itemExpense"
+                      addonBefore="Items of Expense"
+                      value={this.props.itemExpense}
+                      style={{
+                        width: "90%",
+                        marginRight: "3%",
+                        marginTop: "3%"
+                      }}
+                      placeholder="Items of Expense"
+                      disabled
+                    />
                   </TabPane>
                   <TabPane tab="Per Person Calculation" key="2">
                     <div style={{ flexDirection: "row", marginTop: "3%" }}>
@@ -869,6 +890,18 @@ class OrderCustomerPage extends Component {
                       }}
                       placeholder="Service Expenses"
                     />
+                    <Input
+                      id="itemExpense"
+                      addonBefore="Items of Expense"
+                      value={0}
+                      style={{
+                        width: "90%",
+                        marginRight: "3%",
+                        marginTop: "3%"
+                      }}
+                      placeholder="Items of Expense"
+                      disabled
+                    />
                   </TabPane>
                 </Tabs>
                 <Input
@@ -953,6 +986,7 @@ function mapStateToProps(state) {
   return {
     startDate: state.createEvent ? state.createEvent.eventStartDate : "",
     endDate: state.createEvent ? state.createEvent.eventEndDate : "",
+    itemExpense: state.eventItems ? state.eventItems.itemExpense : 0,
     orderCost: state.eventItems ? state.eventItems.orderCost : 0,
     orderedData: state.eventItems.orderedData
       ? state.eventItems.orderedData

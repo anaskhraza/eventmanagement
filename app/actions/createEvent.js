@@ -33,7 +33,8 @@ const getCustomerDetail = dataObj => {
   customerObj.customer_number = "0" + dataObj.mobileNumber;
   customerObj.customer_address = dataObj.customerAddress;
   if (
-    dataObj.mobileNumber && dataObj.mobileNumber.toString().charAt(0) == "0" &&
+    dataObj.mobileNumber &&
+    dataObj.mobileNumber.toString().charAt(0) == "0" &&
     dataObj.mobileNumber.length > 10
   ) {
     customerObj.customer_number = dataObj.mobileNumber;
@@ -41,12 +42,13 @@ const getCustomerDetail = dataObj => {
 
   customerObj.alternate_number = "0" + dataObj.altNumber;
   if (
-    dataObj.altNumber && dataObj.altNumber.toString().charAt(0) == "0" &&
+    dataObj.altNumber &&
+    dataObj.altNumber.toString().charAt(0) == "0" &&
     dataObj.altNumber.length > 10
   ) {
     customerObj.alternate_number = dataObj.altNumber;
   }
-  
+
   if (dataObj.customerId) {
     customerObj.id = dataObj.customerId;
   }
@@ -61,6 +63,7 @@ const getOrderDetail = (dataObj, startDate, endDate) => {
   orderObj.location_address = dataObj.locationAddress;
   orderObj.order_title = dataObj.orderTitle;
   orderObj.gross_amount = dataObj.grossAmount;
+  orderObj.expense_items = dataObj.itemExpense;
   orderObj.received_amount = dataObj.receivedAmount;
   orderObj.service_expense = dataObj.serviceExpense;
   orderObj.total_amount = dataObj.totalAmount;

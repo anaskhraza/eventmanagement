@@ -1,3 +1,4 @@
+import { object } from "webidl-conversions";
 import initialState from "./initialState";
 
 export default function(state = initialState.eventItem, action) {
@@ -23,6 +24,7 @@ export default function(state = initialState.eventItem, action) {
         selectedRowKeys: action.selectedRowKeys || [],
         diableOkButton: true,
         orderCost: getOrderDataCost(action.orderedData) || 0,
+        itemExpense: getItemExpenseCost(action.orderedData) || 0,
         fetching: false
       };
       break;
@@ -128,7 +130,8 @@ export default function(state = initialState.eventItem, action) {
         orderedData: action.payload.orderedData,
         modifiedItems: action.payload.modifiedItems,
         diableOkButton: true,
-        orderCost: getOrderDataCost(action.payload.orderedData)
+        orderCost: getOrderDataCost(action.payload.orderedData),
+        itemExpense: getItemExpenseCost(action.payload.orderedData) || 0
       };
       break;
     }
@@ -139,7 +142,8 @@ export default function(state = initialState.eventItem, action) {
         orderedData: action.payload.items,
         modifiedItems: action.payload.modifiedItems,
         diableOkButton: true,
-        orderCost: getOrderDataCost(action.payload.items)
+        orderCost: getOrderDataCost(action.payload.items),
+        itemExpense: getItemExpenseCost(action.payload.orderedData) || 0
       };
       break;
     }
@@ -153,6 +157,7 @@ export default function(state = initialState.eventItem, action) {
         selectedRowKeys: action.response.selectedRowKeys,
         diableOkButton: true,
         orderCost: getOrderDataCost(action.response.orderedData),
+        itemExpense: getItemExpenseCost(action.payload.orderedData) || 0,
         fetching: false,
         error: null,
         fetchingUpdatedQuantity: false
@@ -179,4 +184,17 @@ function getOrderDataCost(orderedData) {
       return o.price;
     });
   }
+}
+
+function getItemExpenseCost(orderedData) {
+  console.log("ordered Data Item Expense", orderedData);
+  let expenseCost = 0;
+  if (orderedData && orderedData.length > 0) {
+    orderedData.forEach(object => {
+      if (object.Category && object.Category.category_name == "itemExpense") {
+        expenseCost = expenseCost + object.price;
+      }
+    });
+  }
+  return expenseCost;
 }

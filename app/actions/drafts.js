@@ -124,6 +124,7 @@ const getDraftDetail = (dataObj, startDate, endDate) => {
   draftObj.service_expense = dataObj.serviceExpense;
   draftObj.total_amount = dataObj.totalAmount;
   draftObj.balance_amount = dataObj.balanceAmount;
+  draftObj.expense_items = dataObj.itemExpense;
   draftObj.discount = dataObj.discount;
   draftObj.per_head_amount = dataObj.perHeadAmount;
   draftObj.no_of_person = dataObj.noOfPerson;

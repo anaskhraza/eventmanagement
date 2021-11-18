@@ -57,6 +57,8 @@ class OrderCustomerPage extends Component {
       receivedAmount: 0,
       totalAmount: 0,
       grossAmount: 0,
+      itemExpense: 0,
+      itemCalculationExpense: 0,
       isDraft: null,
       draftTitle: null,
       serviceExpense: 0,
@@ -91,6 +93,8 @@ class OrderCustomerPage extends Component {
         : 0;
       return {
         grossAmount: props.orderCost,
+        itemExpense: props.itemExpense,
+        itemCalculationExpense: props.itemExpense,
         totalAmount: parseFloat(props.orderCost) - discount + vehicleCharges,
         balanceAmount:
           parseFloat(props.orderCost) -
@@ -130,7 +134,7 @@ class OrderCustomerPage extends Component {
       customerObj = record.draft_customer;
     }
     this.setState({
-      draftTitle: record.draft_title || '',
+      draftTitle: record.draft_title || "",
       customerName: customerObj.customer_name,
       mobileNumber: customerObj.customer_number
         ? customerObj.customer_number.substr(1)
@@ -143,6 +147,8 @@ class OrderCustomerPage extends Component {
       discount: record.discount,
       receivedAmount: record.received_amount,
       serviceExpense: record.service_expense,
+      itemExpense: record.expense_items,
+      itemCalculationExpense: record.expense_items,
       perHeadAmount: record.per_head_amount,
       noOfPerson: record.no_of_person,
       tabSelect: record.per_head_amount ? "2" : "1",
@@ -310,7 +316,7 @@ class OrderCustomerPage extends Component {
       this.setState({
         tabSelect: key,
         grossAmount: this.state.itemCalculationAmount,
-        totalAmount:
+        itemExpense: this.state.itemCalculationExpense,
           parseFloat(this.state.itemCalculationAmount) -
           discount +
           vehicleCharges,
@@ -332,6 +338,7 @@ class OrderCustomerPage extends Component {
           balanceAmount:
             parseFloat(this.state.perHeadAmount) *
             parseInt(this.state.noOfPerson),
+          itemExpense: 0,
           tabSelect: key
         });
       } else {
@@ -339,6 +346,7 @@ class OrderCustomerPage extends Component {
           grossAmount: 0,
           totalAmount: 0,
           balanceAmount: 0,
+          itemExpense: 0,
           tabSelect: key
         });
       }
@@ -656,6 +664,18 @@ class OrderCustomerPage extends Component {
                       }}
                       placeholder="Service Expenses"
                     />
+                    <Input
+                      id="itemExpense"
+                      addonBefore="Items of Expense"
+                      value={this.props.itemExpense}
+                      style={{
+                        width: "90%",
+                        marginRight: "3%",
+                        marginTop: "3%"
+                      }}
+                      placeholder="Items of Expense"
+                      disabled
+                    />
                   </TabPane>
                   <TabPane tab="Per Person Calculation" key="2">
                     <div style={{ flexDirection: "row", marginTop: "3%" }}>
@@ -778,6 +798,18 @@ class OrderCustomerPage extends Component {
                       }}
                       placeholder="Service Expenses"
                     />
+                    <Input
+                      id="itemExpense"
+                      addonBefore="Items of Expense"
+                      value={0}
+                      style={{
+                        width: "90%",
+                        marginRight: "3%",
+                        marginTop: "3%"
+                      }}
+                      placeholder="Items of Expense"
+                      disabled
+                    />
                   </TabPane>
                 </Tabs>
                 <Input
@@ -854,6 +886,7 @@ function mapStateToProps(state) {
     startDate: state.createEvent ? state.createEvent.eventStartDate : "",
     endDate: state.createEvent ? state.createEvent.eventEndDate : "",
     orderCost: state.eventItems ? state.eventItems.orderCost : 0,
+    itemExpense: state.eventItems ? state.eventItems.itemExpense : 0,
     orderedData: state.eventItems.orderedData
       ? state.eventItems.orderedData
       : [],
