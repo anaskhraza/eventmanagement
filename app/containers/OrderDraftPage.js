@@ -317,7 +317,7 @@ class OrderCustomerPage extends Component {
         tabSelect: key,
         grossAmount: this.state.itemCalculationAmount,
         itemExpense: this.state.itemCalculationExpense,
-          parseFloat(this.state.itemCalculationAmount) -
+        totalAmount: parseFloat(this.state.itemCalculationAmount) -
           discount +
           vehicleCharges,
         balanceAmount:
