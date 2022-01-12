@@ -813,7 +813,7 @@ class TargetListPage extends Component {
               </Col>
             </Row>
           </div>
-          <div style={{ padding: "30px", width: "100%" }}>
+          {/* <div style={{ padding: "30px", width: "100%" }}>
             <Row gutter={16}>
               <Col span={12}>
                 <Card>
@@ -856,7 +856,7 @@ class TargetListPage extends Component {
                 </Card>
               </Col>
             </Row>
-          </div>
+          </div> */}
           <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
             {this.props.auth ? (
               <Button
