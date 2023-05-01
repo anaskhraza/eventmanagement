@@ -692,11 +692,12 @@ class HomePage extends Component {
             width: "80%",
             maxHeight: "100%",
             overflowY: "auto",
-            position: "absolute",
+            position: "absolute"
           }}
         >
           {isErrorHome ? (
             <Alert
+              style={{marginBottom: "10px", width: "95%"}}
               message="Error"
               description="There is an error while fetching data"
               type="error"
@@ -704,350 +705,84 @@ class HomePage extends Component {
             />
           ) : null}
 
-          <div
-            style={{
-              // display: "flex",
-              // justifyContent: "flex-start",
-              marginTop: 10,
-              marginLeft: 20,
-            }}
-          >
-            <label style={{ paddingTop: 20 }}>Total Order Stats</label>
-          </div>
-          <div
-            style={{
-              // display: "flex",
-              // position: "relative",
-              // justifyContent: "flex-start",
-              marginLeft: 20,
-              marginTop: 10,
-            }}
-          >
-            <Row gutter={18}>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#1890ff" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#1890ff" }}>
-                      Total Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 50, color: "#1890ff" }}
-                    >
-                      {this.props.totalOrderCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#c41d7f" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#c41d7f" }}>
-                      Open Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 50, color: "#c41d7f" }}
-                    >
-                      {this.props.totalOverdueCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#531dab" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#531dab" }}>
-                      Completed Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#531dab" }}
-                    >
-                      {this.props.totalCompleteCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#52c41a" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#52c41a" }}>
-                      Closed Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#52c41a" }}
-                    >
-                      {this.props.totalClosedCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#ff4d4f" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#ff4d4f" }}>
-                      Void Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#ff4d4f" }}
-                    >
-                      {this.props.voidCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <div
-            style={{
-              // display: "flex",
-              // justifyContent: "flex-start",
-              marginTop: 10,
-              marginLeft: 20,
-            }}
-          >
-            <label style={{ paddingTop: 20 }}>Current Month Order Stats</label>
-          </div>
-          <div
-            style={{
-              // display: "flex",
-              // justifyContent: "flex-start",
-              marginTop: 10,
-              marginLeft: 20,
-            }}
-          >
-            <Row gutter={18}>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#1890ff" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#1890ff" }}>
-                      Total Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 50, color: "#1890ff" }}
-                    >
-                      {this.props.monthOrderCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#c41d7f" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#c41d7f" }}>
-                      Open Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 50, color: "#c41d7f" }}
-                    >
-                      {this.props.monthOverdueCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#531dab" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#531dab" }}>
-                      Completed Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#531dab" }}
-                    >
-                      {this.props.monthCompleteCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#52c41a" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#52c41a" }}>
-                      Closed Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#52c41a" }}
-                    >
-                      {this.props.monthClosedCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-              <Col span={4}>
-                <Card style={{ height: 250 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Icon
-                      type="shopping-cart"
-                      style={{ fontSize: 30, color: "#ff4d4f" }}
-                    />
-                    <label style={{ fontSize: 20, color: "#ff4d4f" }}>
-                      Void Orders
-                    </label>
-                    <label
-                      style={{ fontSize: 30, marginTop: 20, color: "#ff4d4f" }}
-                    >
-                      {this.props.monthVoidCount}
-                    </label>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <div
-            style={{
-              justifyContent: "flex-start",
-              marginLeft: 20,
-              marginTop: 10,
-            }}
-          >
-            <Card
-              style={{
-                width: "62%",
-              }}
-            >
-              <Button
-                type="primary"
-                icon="poweroff"
-                loading={this.props.fetchingHome}
-                onClick={this.enterIconLoading}
+          {this.props.itemData.length > 0 ? (
+            <div>
+              <div
+                style={{
+                  // display: "flex",
+                  // justifyContent: "flex-start",
+                  marginTop: 10,
+                  marginLeft: 20
+                }}
               >
-                Mark Previous Completed Orders Closed
-              </Button>
-              <label style={{ paddingLeft: 10 }}>
-                Orders to be closed
-                <Tag color="#f50" style={{ marginLeft: 10 }}>
-                  {this.props.compCloseCount}
-                </Tag>
-              </label>
-            </Card>
-          </div>
-          <div
-            style={{
-              // display: "flex",
-              // justifyContent: "flex-start",
-              marginTop: 10,
-              marginLeft: 20,
-            }}
-          >
-            <label style={{ paddingTop: 20 }}>Upcoming Orders</label>
-          </div>
-          <div>
-            <this.HomeCards
-              isShowHome={isShowHome}
-              balanceAmount={balanceAmount}
-            />
-          </div>
+                <label style={{ paddingTop: 20 }}>Upcoming Orders</label>
+              </div>
+              <div>
+                <this.HomeCards
+                  isShowHome={isShowHome}
+                  balanceAmount={balanceAmount}
+                />
+              </div>
+            </div>
+          ) : null}
           <div
             style={{
               backgroundColor: "#FFF",
               width: "90%",
               marginLeft: 20,
-              marginBottom: 20,
+              marginBottom: 20
             }}
           >
+            <div
+              style={{
+                width: "70%",
+                marginBottom: 0,
+                marginLeft: 20,
+                flexDirection: "row",
+                display: "flex"
+              }}
+            >
+              <div
+                style={{
+                  width: "30%",
+                  backgroundColor: "#1890ff",
+                  marginLeft: 2,
+                  padding: 10
+                }}
+              >
+                Upcoming
+              </div>
+              <div
+                style={{
+                  width: "30%",
+                  backgroundColor: "#3cba54",
+                  marginLeft: 2,
+                  padding: 10
+                }}
+              >
+                Closed
+              </div>
+              <div
+                style={{
+                  width: "30%",
+                  backgroundColor: "#f4c20d",
+                  marginLeft: 2,
+                  padding: 10
+                }}
+              >
+                Complete
+              </div>
+              <div
+                style={{
+                  width: "30%",
+                  backgroundColor: "#db3236",
+                  marginLeft: 2,
+                  padding: 10
+                }}
+              >
+                OverDue
+              </div>
+            </div>
             <Calendar
               localizer={localizer}
               views={allViews}
@@ -1055,20 +790,20 @@ class HomePage extends Component {
               popup={true}
               popupOffset={{ x: 30, y: 20 }}
               startAccessor="start"
-              onNavigate={(event) => {
+              onNavigate={event => {
                 this.setState({
                   currentMonth: new Date(event).getMonth(),
-                  currentYear: new Date(event).getFullYear(),
+                  currentYear: new Date(event).getFullYear()
                 });
                 this.props.fetchHomeOrders({
                   monthYear: `${new Date(event).getMonth()}-${new Date(
                     event
                   ).getFullYear()}`,
-                  runClosed: false,
+                  runClosed: false
                 });
               }}
               endAccessor="end"
-              onDoubleClickEvent={(event) => {
+              onDoubleClickEvent={event => {
                 this.setState({
                   eventObj: {
                     ...event,
@@ -1100,12 +835,12 @@ class HomePage extends Component {
                         parseFloat(
                           event.service_expense ? event.service_expense : 0
                         )
-                    ).toFixed(2),
+                    ).toFixed(2)
                   },
-                  showModal: true,
+                  showModal: true
                 });
               }}
-              eventPropGetter={(event) => {
+              eventPropGetter={event => {
                 let background = "#1890ff";
                 if (event.is_closed) {
                   background = "#3cba54";
@@ -1121,53 +856,324 @@ class HomePage extends Component {
           </div>
           <div
             style={{
-              width: "70%",
-              marginBottom: 50,
+              justifyContent: "flex-start",
               marginLeft: 20,
-              flexDirection: "row",
-              display: "flex",
+              marginTop: 10
             }}
           >
-            <div
+            <Card
               style={{
-                width: "30%",
-                backgroundColor: "#1890ff",
-                margin: 20,
-                padding: 10,
+                width: "62%"
               }}
             >
-              Upcoming
-            </div>
-            <div
-              style={{
-                width: "30%",
-                backgroundColor: "#3cba54",
-                margin: 20,
-                padding: 10,
-              }}
-            >
-              Closed
-            </div>
-            <div
-              style={{
-                width: "30%",
-                backgroundColor: "#f4c20d",
-                margin: 20,
-                padding: 10,
-              }}
-            >
-              Complete
-            </div>
-            <div
-              style={{
-                width: "30%",
-                backgroundColor: "#db3236",
-                margin: 20,
-                padding: 10,
-              }}
-            >
-              OverDue
-            </div>
+              <Button
+                type="primary"
+                icon="poweroff"
+                loading={this.props.fetchingHome}
+                onClick={this.enterIconLoading}
+              >
+                Mark Previous Completed Orders Closed
+              </Button>
+              <label style={{ paddingLeft: 10 }}>
+                Orders to be closed
+                <Tag color="#f50" style={{ marginLeft: 10 }}>
+                  {this.props.compCloseCount}
+                </Tag>
+              </label>
+            </Card>
+          </div>
+          <div
+            style={{
+              // display: "flex",
+              // justifyContent: "flex-start",
+              marginTop: 10,
+              marginLeft: 20
+            }}
+          >
+            <label style={{ paddingTop: 20 }}>Total Order Stats</label>
+          </div>
+          <div
+            style={{
+              // display: "flex",
+              // position: "relative",
+              // justifyContent: "flex-start",
+              marginLeft: 20,
+              marginTop: 10
+            }}
+          >
+            <Row gutter={18}>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#1890ff" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#1890ff" }}>
+                      Total Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 50, color: "#1890ff" }}
+                    >
+                      {this.props.totalOrderCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#c41d7f" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#c41d7f" }}>
+                      Open Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 50, color: "#c41d7f" }}
+                    >
+                      {this.props.totalOverdueCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#531dab" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#531dab" }}>
+                      Completed Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#531dab" }}
+                    >
+                      {this.props.totalCompleteCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#52c41a" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#52c41a" }}>
+                      Closed Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#52c41a" }}
+                    >
+                      {this.props.totalClosedCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#ff4d4f" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#ff4d4f" }}>
+                      Void Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#ff4d4f" }}
+                    >
+                      {this.props.voidCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+          <div
+            style={{
+              // display: "flex",
+              // justifyContent: "flex-start",
+              marginTop: 10,
+              marginLeft: 20
+            }}
+          >
+            <label style={{ paddingTop: 20 }}>Current Month Order Stats</label>
+          </div>
+          <div
+            style={{
+              // display: "flex",
+              // justifyContent: "flex-start",
+              marginTop: 10,
+              marginLeft: 20,
+              marginBottom: 100
+            }}
+          >
+            <Row gutter={18}>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#1890ff" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#1890ff" }}>
+                      Total Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 50, color: "#1890ff" }}
+                    >
+                      {this.props.monthOrderCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#c41d7f" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#c41d7f" }}>
+                      Open Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 50, color: "#c41d7f" }}
+                    >
+                      {this.props.monthOverdueCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#531dab" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#531dab" }}>
+                      Completed Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#531dab" }}
+                    >
+                      {this.props.monthCompleteCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#52c41a" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#52c41a" }}>
+                      Closed Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#52c41a" }}
+                    >
+                      {this.props.monthClosedCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card style={{ height: 250 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Icon
+                      type="shopping-cart"
+                      style={{ fontSize: 30, color: "#ff4d4f" }}
+                    />
+                    <label style={{ fontSize: 20, color: "#ff4d4f" }}>
+                      Void Orders
+                    </label>
+                    <label
+                      style={{ fontSize: 30, marginTop: 20, color: "#ff4d4f" }}
+                    >
+                      {this.props.monthVoidCount}
+                    </label>
+                  </div>
+                </Card>
+              </Col>
+            </Row>
           </div>
         </div>
         <this.StatsModal />

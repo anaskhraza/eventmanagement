@@ -161,6 +161,7 @@ class OrderItemPage extends React.PureComponent {
           Check Quantity Available
         </Button>
         <Button
+          style={{marginLeft: "10px"}}
           key="oktosave"
           onClick={this.props.onOkay}
           disabled={this.props.disableOk}

@@ -107,7 +107,7 @@ export const OrderSubmitButton = props => {
         type="primary"
         onClick={showModal}
         disabled={!enableButton}
-        style={{ width: "65%", marginRight: "3%", marginTop: "3%" }}
+        style={{ width: "100%", marginTop: "3%" }}
       >
         Save Order
       </Button>
@@ -152,7 +152,7 @@ export const DraftSubmitButton = props => {
         type="primary"
         onClick={showModal}
         disabled={!enableButton}
-        style={{ width: "65%", marginRight: "3%", marginTop: "3%" }}
+        style={{ width: "100%", marginTop: "3%" }}
       >
         Save Draft
       </Button>

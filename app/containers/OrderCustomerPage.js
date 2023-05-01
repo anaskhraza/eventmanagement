@@ -139,7 +139,7 @@ class OrderCustomerPage extends Component {
         receivedAmount: props.updateOrderDetail.received_amount,
         serviceExpense: props.updateOrderDetail.service_expense,
         itemExpense: props.updateOrderDetail.expense_items,
-        itemCalculationExpense: updateOrderDetail.expense_items,
+        itemCalculationExpense: props.updateOrderDetail.expense_items,
         perHeadAmount: props.updateOrderDetail.per_head_amount,
         noOfPerson: props.updateOrderDetail.no_of_person,
         orderTitle: props.updateOrderDetail.order_title,
@@ -526,10 +526,12 @@ class OrderCustomerPage extends Component {
                 style={{ width: "100%", marginRight: "3%", marginTop: "3%" }}
               />
             ) : (
-              <EventDate
-                onUpdateEditStatus={this.onUpdateEditStatus}
-                isUpdateEvent={this.state.isUpdateEvent}
-              />
+              <div>
+                <EventDate
+                  onUpdateEditStatus={this.onUpdateEditStatus}
+                  isUpdateEvent={this.state.isUpdateEvent}
+                />
+              </div>
             )}
             {this.state.isUpdateEvent ? (
               <Fragment>
@@ -635,7 +637,7 @@ class OrderCustomerPage extends Component {
                   placeholder="Alternate Number"
                 />
 
-                <p style={{ marginRight: "3%", marginTop: "3%" }}>
+                <p>
                   <span style={{ fontWeight: "normal", fontSize: "14px" }}>
                     Customer Address:
                   </span>
@@ -650,7 +652,7 @@ class OrderCustomerPage extends Component {
                 </p>
                 <AlertErrorFieldComponent validateField={alertBoxAddress} />
 
-                <p style={{ marginRight: "3%", marginTop: "3%" }}>
+                <p>
                   <span style={{ fontWeight: "normal", fontSize: "14px" }}>
                     Location Address:
                   </span>
@@ -673,14 +675,20 @@ class OrderCustomerPage extends Component {
                   onChange={this.onTabChange}
                 >
                   <TabPane tab="Per Item Calculation" key="1">
-                    <div style={{ flexDirection: "row", marginTop: "3%" }}>
+                    <div
+                      style={{
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "3%"
+                      }}
+                    >
                       <Input
                         id="grossAmount"
                         addonBefore="Gross Amount"
                         value={this.state.grossAmount}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%"
                         }}
                         placeholder="Total Gross Cost"
                         disabled
@@ -691,8 +699,7 @@ class OrderCustomerPage extends Component {
                         value={this.state.discount}
                         onChange={this.handleNumberChange}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%",
                         }}
                         placeholder="Discount"
                       />
@@ -702,84 +709,99 @@ class OrderCustomerPage extends Component {
                         value={this.state.vehicleCharges}
                         onChange={this.handleNumberChange}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%",
                         }}
                         placeholder="Vehicle Charges"
                       />
                     </div>
-                    <Input
-                      id="totalAmount"
-                      addonBefore="Total Amount"
-                      value={this.state.totalAmount}
+                    <div
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                         marginTop: "3%"
                       }}
-                      placeholder="Total Amount"
-                      disabled
-                    />
-                    <Input
-                      id="receivedAmount"
-                      addonBefore="Received Amount"
-                      value={this.state.receivedAmount}
-                      onChange={this.handleNumberChange}
+                    >
+                      <Input
+                        id="totalAmount"
+                        addonBefore="Total Amount"
+                        value={this.state.totalAmount}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Total Amount"
+                        disabled
+                      />
+                      <Input
+                        id="receivedAmount"
+                        addonBefore="Received Amount"
+                        value={this.state.receivedAmount}
+                        onChange={this.handleNumberChange}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Received Amount"
+                      />
+                    </div>
+
+                    <div
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                         marginTop: "3%"
                       }}
-                      placeholder="Received Amount"
-                    />
+                    >
+                      <Input
+                        id="serviceExpense"
+                        addonBefore="Service Expense"
+                        value={this.state.serviceExpense}
+                        onChange={this.handleNumberChange}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Service Expenses"
+                      />
+                      <Input
+                        id="itemExpense"
+                        addonBefore="Items of Expense"
+                        value={this.props.itemExpense}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Items of Expense"
+                        disabled
+                      />
+                    </div>
                     <Input
                       id="balanceAmount"
                       addonBefore="Balance Amount"
                       value={this.state.balanceAmount}
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        width: "100%",
                         marginTop: "3%"
                       }}
                       placeholder="Balance Amount"
                       disabled
                     />
-                    <Input
-                      id="serviceExpense"
-                      addonBefore="Service Expense"
-                      value={this.state.serviceExpense}
-                      onChange={this.handleNumberChange}
-                      style={{
-                        width: "90%",
-                        marginRight: "3%",
-                        marginTop: "3%"
-                      }}
-                      placeholder="Service Expenses"
-                    />
-                    <Input
-                      id="itemExpense"
-                      addonBefore="Items of Expense"
-                      value={this.props.itemExpense}
-                      style={{
-                        width: "90%",
-                        marginRight: "3%",
-                        marginTop: "3%"
-                      }}
-                      placeholder="Items of Expense"
-                      disabled
-                    />
                   </TabPane>
                   <TabPane tab="Per Person Calculation" key="2">
-                    <div style={{ flexDirection: "row", marginTop: "3%" }}>
-                      <div>
+                    <div
+                      style={{
+                        flexDirection: "row",
+                        marginTop: "3%",
+                        display: "flex",
+                        justifyContent: "space-between"
+                      }}
+                    >
+                      <div style={{ width: "49%" }}>
                         <Input
                           id="noOfPerson"
                           addonBefore="No of Person"
                           value={this.state.noOfPerson}
                           onChange={this.handleNumberChange}
                           style={{
-                            width: "90%",
-                            marginRight: "3%"
+                            width: "100%"
                           }}
                           placeholder="No Of Person"
                         />
@@ -788,16 +810,14 @@ class OrderCustomerPage extends Component {
                           additionalCondition={tabSelect == "2"}
                         />
                       </div>
-                      <div>
+                      <div style={{ width: "49%" }}>
                         <Input
                           id="perHeadAmount"
                           addonBefore="Per Head"
                           value={this.state.perHeadAmount}
                           onChange={this.handleNumberChange}
                           style={{
-                            width: "90%",
-                            marginRight: "3%",
-                            marginTop: "10px"
+                            width: "100%"
                           }}
                           placeholder="Per Head"
                         />
@@ -807,14 +827,20 @@ class OrderCustomerPage extends Component {
                         />
                       </div>
                     </div>
-                    <div style={{ flexDirection: "row", marginTop: "3%" }}>
+                    <div
+                      style={{
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "3%"
+                      }}
+                    >
                       <Input
                         id="grossAmount"
                         addonBefore="Gross Amount"
                         value={this.state.grossAmount}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%"
                         }}
                         placeholder="Total Gross Cost"
                         disabled
@@ -825,8 +851,7 @@ class OrderCustomerPage extends Component {
                         value={this.state.discount}
                         onChange={this.handleNumberChange}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%"
                         }}
                         placeholder="Discount"
                       />
@@ -836,70 +861,78 @@ class OrderCustomerPage extends Component {
                         value={this.state.vehicleCharges}
                         onChange={this.handleNumberChange}
                         style={{
-                          width: "30%",
-                          marginRight: "3%"
+                          width: "33%"
                         }}
                         placeholder="Vehicle Charges"
                       />
                     </div>
-                    <Input
-                      id="totalAmount"
-                      addonBefore="Total Amount"
-                      value={this.state.totalAmount}
+                    <div
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                         marginTop: "3%"
                       }}
-                      placeholder="Total Amount"
-                      disabled
-                    />
-                    <Input
-                      id="receivedAmount"
-                      addonBefore="Received Amount"
-                      value={this.state.receivedAmount}
-                      onChange={this.handleNumberChange}
+                    >
+                      <Input
+                        id="totalAmount"
+                        addonBefore="Total Amount"
+                        value={this.state.totalAmount}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Total Amount"
+                        disabled
+                      />
+                      <Input
+                        id="receivedAmount"
+                        addonBefore="Received Amount"
+                        value={this.state.receivedAmount}
+                        onChange={this.handleNumberChange}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Received Amount"
+                      />
+                    </div>
+                    <div
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                         marginTop: "3%"
                       }}
-                      placeholder="Received Amount"
-                    />
+                    >
+                      <Input
+                        id="serviceExpense"
+                        addonBefore="Service Expense"
+                        value={this.state.serviceExpense}
+                        onChange={this.handleNumberChange}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Service Expenses"
+                      />
+                      <Input
+                        id="itemExpense"
+                        addonBefore="Items of Expense"
+                        value={0}
+                        style={{
+                          width: "49%"
+                        }}
+                        placeholder="Items of Expense"
+                        disabled
+                      />
+                    </div>
                     <Input
                       id="balanceAmount"
                       addonBefore="Balance Amount"
                       value={this.state.balanceAmount}
                       style={{
-                        width: "90%",
-                        marginRight: "3%",
+                        width: "100%",
                         marginTop: "3%"
                       }}
                       placeholder="Balance Amount"
-                      disabled
-                    />
-                    <Input
-                      id="serviceExpense"
-                      addonBefore="Service Expense"
-                      value={this.state.serviceExpense}
-                      onChange={this.handleNumberChange}
-                      style={{
-                        width: "90%",
-                        marginRight: "3%",
-                        marginTop: "3%"
-                      }}
-                      placeholder="Service Expenses"
-                    />
-                    <Input
-                      id="itemExpense"
-                      addonBefore="Items of Expense"
-                      value={0}
-                      style={{
-                        width: "90%",
-                        marginRight: "3%",
-                        marginTop: "3%"
-                      }}
-                      placeholder="Items of Expense"
                       disabled
                     />
                   </TabPane>
@@ -908,7 +941,7 @@ class OrderCustomerPage extends Component {
                   id="orderTitle"
                   addonBefore="Order Title"
                   value={this.state.orderTitle}
-                  style={{ width: "100%", marginRight: "3%", marginTop: "3%" }}
+                  style={{ width: "100%", marginTop: "3%" }}
                   onChange={this.handleChange}
                   placeholder="Order Title"
                 />
@@ -927,7 +960,7 @@ class OrderCustomerPage extends Component {
                   id="draftTitle"
                   addonBefore="Draft Title"
                   value={this.state.draftTitle}
-                  style={{ width: "100%", marginRight: "3%", marginTop: "3%" }}
+                  style={{ width: "100%", marginTop: "3%" }}
                   onChange={this.handleChange}
                   placeholder="Draft Title"
                 />
@@ -947,7 +980,6 @@ class OrderCustomerPage extends Component {
                   type="warn"
                   style={{
                     width: "100%",
-                    marginRight: "3%",
                     marginTop: "3%",
                     justifyContent: "center",
                     backgroundColor: "#FFCC00"
