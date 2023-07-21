@@ -4,7 +4,7 @@
   "version": "0.4.0",
   "description": "Event Management",
   "scripts": {
-    "open-server": "babel-node api/distServer.js",
+    "open-server": "babel-node --trace-deprecation api/distServer.js",
     "build-server": "babel api -d dist",
     "open-dev": "concurrently \"nodemon distServer.js \" \"yarn dev\"",
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -270,7 +270,7 @@
     "nodemon": "1.19.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "pg": "^7.17.0",
+    "pg": "8.5.1",
     "pg-hstore": "^2.3.3",
     "pg-monitor": "1.1.0",
     "pg-promise": "8.7.2",
