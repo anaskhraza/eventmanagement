@@ -783,6 +783,12 @@ class HomePage extends Component {
                 OverDue
               </div>
             </div>
+            {this.props.fetchingHome ? (<div style={{
+                  width: "80%",
+                  backgroundColor: "white",
+                  marginLeft: 2,
+                  padding: 10
+                }}> <label style={{color: "black"}}>Loading Calendar</label></div>): null }
             <Calendar
               localizer={localizer}
               views={allViews}

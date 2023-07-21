@@ -613,7 +613,7 @@ class ItemListPage extends Component {
       <React.Fragment>
         <div
           style={{
-            width: "auto",
+            width: "80%",
             maxHeight: "100%",
             overflowY: "auto",
             position: "absolute"
